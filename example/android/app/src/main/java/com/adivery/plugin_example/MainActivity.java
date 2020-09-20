@@ -1,4 +1,4 @@
-package com.adivery.adivery_plugin_example;
+package com.adivery.plugin_example;
 
 import io.flutter.embedding.android.FlutterActivity;
 

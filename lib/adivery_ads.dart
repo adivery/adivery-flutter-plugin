@@ -3,7 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:adivery_plugin/adivery_plugin.dart';
+import 'package:adivery/adivery.dart';
+
 
 abstract class Ad {
   void show();

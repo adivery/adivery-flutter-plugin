@@ -1,4 +1,4 @@
-package com.adivery.adivery_plugin;
+package com.adivery.plugin;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -12,7 +12,6 @@ import com.adivery.sdk.AdiveryNativeAd;
 import com.adivery.sdk.AdiveryNativeCallback;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:adivery_plugin/adivery_plugin.dart';
-import 'package:adivery_plugin/adivery_ads.dart';
+import 'package:adivery/adivery.dart';
+import 'package:adivery/adivery_ads.dart';
 
 void main() {
   runApp(MyApp());
@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
       children: <Widget>[
         BannerAd(
           placementId: "5f2c4c86-a6ec-4735-9a44-f881fe40789f",
-          bannerType: BannerAdSize.NORMAL_SQUARE,
+          bannerType: BannerAdSize.MEDIUM_RECTANGLE,
           onAdLoaded: _onAdLoaded,
           onAdClicked: _onAdClicked,
         ),
@@ -99,6 +99,9 @@ class _MyAppState extends State<MyApp> {
         },
         onAdShown: (ad) {
           print("interstitialAd shown");
+        },
+        onAdLoadFailed: (ad, code) {
+          print("show ad failed");
         }).loadAd();
   }
 
@@ -219,18 +222,22 @@ class _MyAppState extends State<MyApp> {
                           ),
                         ),
                         Flexible(
-                          flex:2,
+                          flex: 2,
                           child: Text(
                             nativeAd.headline,
                             style: TextStyle(
-                                color: Colors.black, fontWeight: FontWeight.bold,fontSize: 16),
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
                             textAlign: TextAlign.end,
                           ),
                         )
-
                       ],
                     ),
-                    Text(nativeAd.description, textAlign: TextAlign.end,)
+                    Text(
+                      nativeAd.description,
+                      textAlign: TextAlign.end,
+                    )
                   ]),
                 ),
                 Flexible(

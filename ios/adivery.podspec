@@ -1,10 +1,10 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint adivery_plugin.podspec' to validate before publishing.
+# Run `pod lib lint adivery.podspec' to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'adivery_plugin'
-  s.version          = '0.0.1'
+  s.name             = 'adivery'
+  s.version          = '1.0.0'
   s.summary          = 'A Simple flutter plugin that activates Adivery ads on flutter.'
   s.description      = <<-DESC
 A Simple flutter plugin that activates Adivery ads on flutter.

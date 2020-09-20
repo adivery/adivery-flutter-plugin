@@ -1,4 +1,4 @@
-group 'com.adivery.adivery_plugin'
+group 'com.adivery.plugin'
 version '1.0'
 
 buildscript {

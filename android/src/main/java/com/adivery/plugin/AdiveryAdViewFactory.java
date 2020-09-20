@@ -1,4 +1,4 @@
-package com.adivery.adivery_plugin;
+package com.adivery.plugin;
 
 import android.content.Context;
 

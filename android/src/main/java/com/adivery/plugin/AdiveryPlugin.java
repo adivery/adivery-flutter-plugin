@@ -1,4 +1,4 @@
-package com.adivery.adivery_plugin;
+package com.adivery.plugin;
 
 
 import android.app.Activity;
@@ -8,8 +8,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.adivery.sdk.Adivery;
-import com.adivery.sdk.AdiveryInterstitialCallback;
-import com.adivery.sdk.AdiveryLoadedAd;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -20,7 +18,6 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
-import io.flutter.plugin.common.StandardMessageCodec;
 
 /**
  * AdiveryPlugin
