@@ -1,4 +1,3 @@
-
 group 'com.adivery.adivery_plugin'
 version '1.0'
 
@@ -25,6 +24,8 @@ rootProject.allprojects {
         }
     }
 }
+
+apply plugin: 'com.android.library'
 
 
 android {

@@ -18,7 +18,7 @@ typedef EmptyFunction = void Function(Ad ad);
 typedef ErrorFunction = void Function(Ad ad, int errorCode);
 typedef NativeAdFunction = void Function(Map<dynamic, dynamic> nativeAd);
 
-enum BannerAdSize { BANNER, LARGE_BANNER, NORMAL_SQUARE }
+enum BannerAdSize { BANNER, LARGE_BANNER, MEDIUM_RECTANGLE }
 
 class BannerAd extends StatefulWidget {
   final String placementId;
@@ -125,7 +125,7 @@ class _TextViewState extends State<BannerAd> {
     } else if (bannerType == BannerAdSize.LARGE_BANNER) {
       return "large_banner";
     } else {
-      return "normal_square";
+      return "medium_rectangle";
     }
   }
 }
