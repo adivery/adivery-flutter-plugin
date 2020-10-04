@@ -3,8 +3,6 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:adivery/adivery.dart';
-
 
 abstract class Ad {
   void show();
@@ -41,13 +39,14 @@ class BannerAd extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TextViewState(
-      placementId: placementId,
-      bannerType: bannerType,
-      onAdClicked: onAdClicked,
-      onAdLoaded: onAdLoaded,
-      onAdLoadFailed: onAdLoadFailed,
-      onAdShowFailed: onAdShowFailed);
+  State<StatefulWidget> createState() =>
+      _TextViewState(
+          placementId: placementId,
+          bannerType: bannerType,
+          onAdClicked: onAdClicked,
+          onAdLoaded: onAdLoaded,
+          onAdLoadFailed: onAdLoadFailed,
+          onAdShowFailed: onAdShowFailed);
 }
 
 class _TextViewState extends State<BannerAd> {
@@ -182,6 +181,7 @@ class BannerAdEventHandler extends Ad {
 }
 
 class InterstitialAd {
+  static const MethodChannel _channel = const MethodChannel('adivery_plugin');
   final String placementId;
   final EmptyFunction onAdLoaded;
   final EmptyFunction onAdClicked;
@@ -204,7 +204,8 @@ class InterstitialAd {
   InterstitialAdEvenHandler _handler;
 
   void loadAd() {
-    AdiveryPlugin.requestInterstitialAd(placementId, id);
+    _channel
+        .invokeMethod("interstitial", {"placement_id": placementId, "id": id});
     _handler = new InterstitialAdEvenHandler(
         id: id,
         onAdLoadFailed: onAdLoadFailed,
@@ -286,6 +287,8 @@ class InterstitialAdEvenHandler extends Ad {
 }
 
 class RewardedAd {
+  static const MethodChannel _channel = const MethodChannel('adivery_plugin');
+
   final String placementId;
   final EmptyFunction onAdLoaded;
   final EmptyFunction onAdClicked;
@@ -296,20 +299,19 @@ class RewardedAd {
   final EmptyFunction onAdRewarded;
   final String id = UniqueKey().toString();
 
-  RewardedAd(
-      {this.placementId,
-      this.onAdLoaded,
-      this.onAdClicked,
-      this.onAdShown,
-      this.onAdShowFailed,
-      this.onAdLoadFailed,
-      this.onAdClosed,
-      this.onAdRewarded});
+  RewardedAd({this.placementId,
+    this.onAdLoaded,
+    this.onAdClicked,
+    this.onAdShown,
+    this.onAdShowFailed,
+    this.onAdLoadFailed,
+    this.onAdClosed,
+    this.onAdRewarded});
 
   RewardedAdEventHandler _handler;
 
   void loadAd() {
-    AdiveryPlugin.requestRewardedAd(placementId, id);
+    _channel.invokeMethod("rewarded", {"placement_id": placementId, "id": id});
     _handler = new RewardedAdEventHandler(
         id: id,
         onAdLoadFailed: onAdLoadFailed,
@@ -339,16 +341,15 @@ class RewardedAdEventHandler extends Ad {
   final EmptyFunction onAdRewarded;
   final String id;
 
-  RewardedAdEventHandler(
-      {this.placementId,
-      this.id,
-      this.onAdLoaded,
-      this.onAdClicked,
-      this.onAdShown,
-      this.onAdShowFailed,
-      this.onAdLoadFailed,
-      this.onAdClosed,
-      this.onAdRewarded});
+  RewardedAdEventHandler({this.placementId,
+    this.id,
+    this.onAdLoaded,
+    this.onAdClicked,
+    this.onAdShown,
+    this.onAdShowFailed,
+    this.onAdLoadFailed,
+    this.onAdClosed,
+    this.onAdRewarded});
 
   MethodChannel _channel;
 
@@ -396,6 +397,8 @@ class RewardedAdEventHandler extends Ad {
 }
 
 class NativeAd {
+  static const MethodChannel _channel = const MethodChannel('adivery_plugin');
+
   final String placementId;
   final NativeAdEmptyFunction onAdLoaded;
   final NativeAdEmptyFunction onAdClicked;
@@ -405,14 +408,13 @@ class NativeAd {
   final NativeAdEmptyFunction onAdClosed;
   final String id = UniqueKey().toString();
 
-  NativeAd(
-      {this.placementId,
-      this.onAdLoaded,
-      this.onAdClosed,
-      this.onAdClicked,
-      this.onAdShowFailed,
-      this.onAdLoadFailed,
-      this.onAdShown});
+  NativeAd({this.placementId,
+    this.onAdLoaded,
+    this.onAdClosed,
+    this.onAdClicked,
+    this.onAdShowFailed,
+    this.onAdLoadFailed,
+    this.onAdShown});
 
   NativeAdEventHandler _handler;
 
@@ -425,7 +427,7 @@ class NativeAd {
   bool isLoaded = false;
 
   void loadAd() {
-    AdiveryPlugin.requestNativeAd(placementId, id);
+    _channel.invokeMethod("native", {"placement_id": placementId, "id": id});
     _handler = new NativeAdEventHandler(
         onAdLoaded: (data) {
           headline = data['headline'];
@@ -474,15 +476,14 @@ class NativeAdEventHandler {
   final NativeAdEmptyFunction onAdClosed;
   final String id;
 
-  NativeAdEventHandler(
-      {this.id,
-      this.placementId,
-      this.onAdLoaded,
-      this.onAdClosed,
-      this.onAdClicked,
-      this.onAdShowFailed,
-      this.onAdLoadFailed,
-      this.onAdShown});
+  NativeAdEventHandler({this.id,
+    this.placementId,
+    this.onAdLoaded,
+    this.onAdClosed,
+    this.onAdClicked,
+    this.onAdShowFailed,
+    this.onAdLoadFailed,
+    this.onAdShown});
 
   MethodChannel _channel;
 

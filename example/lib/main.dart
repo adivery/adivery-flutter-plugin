@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-
 import 'package:adivery/adivery.dart';
 import 'package:adivery/adivery_ads.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,6 +20,7 @@ class _MyAppState extends State<MyApp> {
 
   void initPlatformState() {
     AdiveryPlugin.initialize("7e27fb38-5aff-473a-998f-437b89426f66");
+    AdiveryPlugin.setLoggingEnabled(true);
   }
 
   static void _onAdLoaded(Ad ad) {
@@ -144,7 +144,7 @@ class _MyAppState extends State<MyApp> {
                         Flexible(
                           flex: 1,
                           child: RaisedButton(
-                            child: Text("Normal Square"),
+                            child: Text("Medium Rectangle"),
                             onPressed: () {
                               _onChanged(2);
                             },
