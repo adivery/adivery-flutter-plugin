@@ -57,6 +57,7 @@ public class NativeAd extends AdiveryNativeCallback implements MethodChannel.Met
 
     private void loadAd() {
         Adivery.requestNativeAd(activity, placementId, this);
+
     }
 
     @Override
@@ -90,6 +91,7 @@ public class NativeAd extends AdiveryNativeCallback implements MethodChannel.Met
         data.put("icon", readDrawable(ad.getIcon()));
         data.put("image", readDrawable(ad.getImage()));
         channel.invokeMethod("onAdLoaded", data);
+        ad.recordImpression();
     }
 
     private byte[] readDrawable(Drawable drawable) {
