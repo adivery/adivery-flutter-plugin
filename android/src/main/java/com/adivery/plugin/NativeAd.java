@@ -44,11 +44,6 @@ public class NativeAd extends AdiveryNativeCallback implements MethodChannel.Met
                     this.ad.recordClick();
                 }
                 break;
-            case "recordImpression":
-                if (this.ad != null) {
-                    this.ad.recordImpression();
-                }
-                break;
             default:
                 result.notImplemented();
         }

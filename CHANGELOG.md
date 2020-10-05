@@ -1,3 +1,12 @@
+## 1.0.3
+
+* Updated to latest Adivery SDK
+* Removed record impression methon from native ad
+
+## 1.0.2
+
+* Fix plugin's record impression on native ad
+
 ## 1.0.1
 
 * Fix plugin's context passing issue

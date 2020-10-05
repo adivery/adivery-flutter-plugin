@@ -460,10 +460,6 @@ class NativeAd {
   void recordClick() {
     _handler.recordClick();
   }
-
-  void recordImpression() {
-    _handler.recordImpression();
-  }
 }
 
 class NativeAdEventHandler {
@@ -522,9 +518,5 @@ class NativeAdEventHandler {
 
   void recordClick() {
     _channel.invokeMethod("recordClick");
-  }
-
-  void recordImpression() {
-    _channel.invokeMethod("recordImpression");
   }
 }
