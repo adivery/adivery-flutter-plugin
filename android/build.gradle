@@ -11,17 +11,16 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:4.1.1'
     }
 }
 
-rootProject.allprojects {
-    repositories {
-        google()
-        jcenter()
-        maven {
-            url 'https://dl.bintray.com/adivery/maven'
-        }
+repositories {
+    mavenLocal()
+    google()
+    jcenter()
+    maven {
+        url 'https://dl.bintray.com/adivery/maven'
     }
 }
 
@@ -40,5 +39,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.adivery:sdk:2.0.1'
+    implementation 'com.adivery:sdk:3.3.2'
 }

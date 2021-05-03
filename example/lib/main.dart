@@ -31,6 +31,14 @@ class _MyAppState extends State<MyApp> {
     print("banner clicked");
   }
 
+  static void _onAdLoadFailed(Ad ad, int error) {
+    print("banner load failed");
+  }
+
+  static void _onAdShowFailed(Ad ad, int error) {
+    print("banner show failed");
+  }
+
   static int _index = 0;
 
   int _reward = 0;
@@ -55,6 +63,8 @@ class _MyAppState extends State<MyApp> {
           bannerType: BannerAdSize.LARGE_BANNER,
           onAdLoaded: _onAdLoaded,
           onAdClicked: _onAdClicked,
+          onAdLoadFailed: _onAdLoadFailed,
+          onAdShowFailed: _onAdShowFailed,
         ),
       ],
     ),
@@ -65,6 +75,8 @@ class _MyAppState extends State<MyApp> {
           bannerType: BannerAdSize.MEDIUM_RECTANGLE,
           onAdLoaded: _onAdLoaded,
           onAdClicked: _onAdClicked,
+          onAdLoadFailed: _onAdLoadFailed,
+          onAdShowFailed: _onAdShowFailed,
         ),
       ],
     ),
@@ -85,6 +97,8 @@ class _MyAppState extends State<MyApp> {
         bannerType: BannerAdSize.LARGE_BANNER,
         onAdLoaded: _onAdLoaded,
         onAdClicked: _onAdClicked,
+        onAdLoadFailed: _onAdLoadFailed,
+        onAdShowFailed: _onAdShowFailed,
       );
     } else {
       return _widgetOptions.elementAt(2);
@@ -93,16 +107,26 @@ class _MyAppState extends State<MyApp> {
 
   _loadInterstitial() {
     InterstitialAd(
-        placementId: "de5db046-765d-478f-bb2e-30dc2eaf3f51",
-        onAdLoaded: (ad) {
-          ad.show();
-        },
-        onAdShown: (ad) {
-          print("interstitialAd shown");
-        },
-        onAdLoadFailed: (ad, code) {
-          print("show ad failed");
-        }).loadAd();
+            placementId: "de5db046-765d-478f-bb2e-30dc2eaf3f51",
+            onAdLoaded: (ad) {
+              ad.show();
+            },
+            onAdShown: (ad) {
+              print("interstitialAd shown");
+            },
+            onAdLoadFailed: (ad, code) {
+              print("interstitial show ad failed");
+            },
+            onAdClicked: (ad) {
+              print("interstitial ad clicked");
+            },
+            onAdClosed: (ad) {
+              print("interstitial ad closed");
+            },
+            onAdShowFailed: (ad, code){
+              print("interstitial ad show failed");
+            })
+        .loadAd();
   }
 
   @override
@@ -125,7 +149,7 @@ class _MyAppState extends State<MyApp> {
                         Flexible(
                           flex: 1,
                           fit: FlexFit.tight,
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             child: Text("Banner"),
                             onPressed: () {
                               _onChanged(0);
@@ -134,7 +158,7 @@ class _MyAppState extends State<MyApp> {
                         ),
                         Flexible(
                           flex: 1,
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             child: Text("Large Banner"),
                             onPressed: () {
                               _onChanged(1);
@@ -143,7 +167,7 @@ class _MyAppState extends State<MyApp> {
                         ),
                         Flexible(
                           flex: 1,
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             child: Text("Medium Rectangle"),
                             onPressed: () {
                               _onChanged(2);
@@ -160,17 +184,17 @@ class _MyAppState extends State<MyApp> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Flexible(
-                            child: RaisedButton(
+                            child: ElevatedButton(
                                 onPressed: _loadInterstitial,
                                 child: Text("InterstitialAd"))),
                         Flexible(
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             onPressed: _loadRewardedAd,
                             child: Text("RewardedAd"),
                           ),
                         ),
                         Flexible(
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             onPressed: _loadNative,
                             child: Text("NativeAd"),
                           ),
@@ -214,7 +238,7 @@ class _MyAppState extends State<MyApp> {
                       children: <Widget>[
                         Flexible(
                           flex: 1,
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             onPressed: () {
                               nativeAd.recordClick();
                             },
