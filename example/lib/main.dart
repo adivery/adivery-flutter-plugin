@@ -45,6 +45,10 @@ class _MyAppState extends State<MyApp> {
 
   NativeAd nativeAd;
 
+  InterstitialAd interstitialAd;
+
+  RewardedAd rewardedAd;
+
   List<Widget> _widgetOptions = <Widget>[
     Row(
       children: <Widget>[
@@ -106,7 +110,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   _loadInterstitial() {
-    InterstitialAd(
+    interstitialAd = InterstitialAd(
             placementId: "de5db046-765d-478f-bb2e-30dc2eaf3f51",
             onAdLoaded: (ad) {
               ad.show();
@@ -122,11 +126,12 @@ class _MyAppState extends State<MyApp> {
             },
             onAdClosed: (ad) {
               print("interstitial ad closed");
+              interstitialAd.destroy();
             },
             onAdShowFailed: (ad, code){
               print("interstitial ad show failed");
-            })
-        .loadAd();
+            });
+    interstitialAd.loadAd();
   }
 
   @override
@@ -209,7 +214,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _loadRewardedAd() {
-    RewardedAd(
+    rewardedAd = RewardedAd(
         placementId: "3f97dc4d-3e09-4024-acaf-931862c03ba8",
         onAdLoaded: (ad) {
           ad.show();
@@ -219,7 +224,11 @@ class _MyAppState extends State<MyApp> {
           setState(() {
             _reward += 100;
           });
-        }).loadAd();
+        },
+        onAdClosed: (ad) {
+          rewardedAd.destroy();
+    });
+    rewardedAd.loadAd();
   }
 
   Widget _nativeAd() {
@@ -286,8 +295,10 @@ class _MyAppState extends State<MyApp> {
   void _loadNative() {
     nativeAd = new NativeAd(
         placementId: "103ea0d3-7b1d-458e-ac9d-a3165e7634d2",
-        onAdLoaded: _onNativeAdLoaded);
+        onAdLoaded: _onNativeAdLoaded,
+    );
     nativeAd.loadAd();
+    // call nativeAd.destroy(); when Widget removed;
   }
 
   void _onNativeAdLoaded() {

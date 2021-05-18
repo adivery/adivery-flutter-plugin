@@ -83,6 +83,6 @@ public class AdiveryAdView extends AdiveryBannerCallback implements PlatformView
 
     @Override
     public void dispose() {
-
+        channel.setMethodCallHandler(null);
     }
 }

@@ -221,6 +221,9 @@ class InterstitialAd {
   void show() {
     _handler.show();
   }
+  void destroy(){
+    _channel.invokeListMethod("destroyAd", id);
+  }
 }
 
 class InterstitialAdEvenHandler extends Ad {
@@ -327,6 +330,9 @@ class RewardedAd {
 
   void show() {
     _handler.show();
+  }
+  void destroy(){
+    _channel.invokeListMethod("destroyAd", id);
   }
 }
 
@@ -459,6 +465,9 @@ class NativeAd {
 
   void recordClick() {
     _handler.recordClick();
+  }
+  void destroy(){
+    _channel.invokeListMethod("destroyAd", id);
   }
 }
 

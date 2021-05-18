@@ -2,8 +2,14 @@ package com.adivery.plugin;
 
 
 import android.app.Activity;
+
 import androidx.annotation.NonNull;
+
 import com.adivery.sdk.Adivery;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -22,6 +28,7 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
   private static Activity activity;
   private static BinaryMessenger messenger;
   private MethodChannel channel;
+  private final List<BaseAd> ads = new ArrayList<>();
 
 
   @Override
@@ -72,22 +79,40 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
       case "native":
         requestNativeAd((String) call.argument("placement_id"), (String) call.argument("id"));
         break;
+      case "destroyAd":
+        destroyAd((String) call.arguments);
       default:
         result.notImplemented();
     }
     result.success(true);
   }
 
+  public void destroyAd(String id) {
+    BaseAd ad = findAd(id);
+    if (ad != null) {
+      ads.remove(ad);
+    }
+  }
+
+  private BaseAd findAd(String id) {
+    for (BaseAd ad : ads) {
+      if (ad.id.equals(id)) {
+        return ad;
+      }
+    }
+    return null;
+  }
+
   private void requestNativeAd(String placementId, String id) {
-    new NativeAd(activity, placementId, id, messenger);
+    ads.add(new NativeAd(activity, placementId, id, messenger));
   }
 
   private void requestRewardedAd(String placementId, String id) {
-    new RewardedAd(activity, placementId, id, messenger);
+    ads.add(new RewardedAd(activity, placementId, id, messenger));
   }
 
   private void requestInterstitialAd(String placementId, String id) {
-    new InterstitialAd(activity, placementId, id, messenger);
+    ads.add(new InterstitialAd(activity, placementId, id, messenger));
   }
 
   @Override

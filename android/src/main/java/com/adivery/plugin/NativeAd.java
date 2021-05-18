@@ -19,14 +19,49 @@ import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
-public class NativeAd extends AdiveryNativeCallback implements MethodChannel.MethodCallHandler {
+public class NativeAd extends BaseAd implements MethodChannel.MethodCallHandler {
     private final Activity activity;
     private final String placementId;
     private final MethodChannel channel;
     private AdiveryNativeAd ad;
+    private final AdiveryNativeCallback callback = new AdiveryNativeCallback() {
+        @Override
+        public void onAdShowFailed(int errorCode) {
+            channel.invokeMethod("onAdShowFailed", errorCode);
+        }
+
+        @Override
+        public void onAdLoadFailed(int errorCode) {
+            channel.invokeMethod("onAdLoadFailed", errorCode);
+        }
+
+        @Override
+        public void onAdClicked() {
+            channel.invokeMethod("onAdClicked", null);
+        }
+
+        @Override
+        public void onAdShown() {
+            channel.invokeMethod("onAdShown", null);
+        }
+
+        @Override
+        public void onAdLoaded(AdiveryNativeAd ad) {
+            NativeAd.this.ad = ad;
+            Map<String, Object> data = new HashMap<>();
+            data.put("headline", ad.getHeadline());
+            data.put("description", ad.getDescription());
+            data.put("advertiser", ad.getAdvertiser());
+            data.put("call_to_action", ad.getCallToAction());
+            data.put("icon", readDrawable(ad.getIcon()));
+            data.put("image", readDrawable(ad.getImage()));
+            channel.invokeMethod("onAdLoaded", data);
+            ad.recordImpression();
+        }
+    };
 
     public NativeAd(Activity activity, String placementId, String id, BinaryMessenger messenger) {
-
+        super(id);
         this.activity = activity;
         this.placementId = placementId;
         channel = new MethodChannel(messenger, "adivery/native_" + id);
@@ -51,43 +86,11 @@ public class NativeAd extends AdiveryNativeCallback implements MethodChannel.Met
     }
 
     private void loadAd() {
-        Adivery.requestNativeAd(activity, placementId, this);
+        Adivery.requestNativeAd(activity, placementId, callback);
 
     }
 
-    @Override
-    public void onAdShowFailed(int errorCode) {
-        channel.invokeMethod("onAdShowFailed", errorCode);
-    }
 
-    @Override
-    public void onAdLoadFailed(int errorCode) {
-        channel.invokeMethod("onAdLoadFailed", errorCode);
-    }
-
-    @Override
-    public void onAdClicked() {
-        channel.invokeMethod("onAdClicked", null);
-    }
-
-    @Override
-    public void onAdShown() {
-        channel.invokeMethod("onAdShown", null);
-    }
-
-    @Override
-    public void onAdLoaded(AdiveryNativeAd ad) {
-        this.ad = ad;
-        Map<String, Object> data = new HashMap<>();
-        data.put("headline", ad.getHeadline());
-        data.put("description", ad.getDescription());
-        data.put("advertiser", ad.getAdvertiser());
-        data.put("call_to_action", ad.getCallToAction());
-        data.put("icon", readDrawable(ad.getIcon()));
-        data.put("image", readDrawable(ad.getImage()));
-        channel.invokeMethod("onAdLoaded", data);
-        ad.recordImpression();
-    }
 
     private byte[] readDrawable(Drawable drawable) {
         BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;

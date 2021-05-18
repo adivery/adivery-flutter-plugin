@@ -12,15 +12,52 @@ import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
-public class RewardedAd extends AdiveryRewardedCallback implements MethodChannel.MethodCallHandler {
+public class RewardedAd extends BaseAd implements MethodChannel.MethodCallHandler {
 
     private final Activity activity;
     private final String placementId;
     private final MethodChannel channel;
     private AdiveryLoadedAd ad;
+    private final AdiveryRewardedCallback callback = new AdiveryRewardedCallback() {
+        @Override
+        public void onAdLoaded(AdiveryLoadedAd ad) {
+            RewardedAd.this.ad = ad;
+            channel.invokeMethod("onAdLoaded", null);
+        }
+
+        @Override
+        public void onAdClosed() {
+            channel.invokeMethod("onAdClosed", null);
+        }
+
+        @Override
+        public void onAdShown() {
+            channel.invokeMethod("onAdShown", null);
+        }
+
+        @Override
+        public void onAdClicked() {
+            channel.invokeMethod("onAdClicked", null);
+        }
+
+        @Override
+        public void onAdLoadFailed(int errorCode) {
+            channel.invokeMethod("onAdLoadFailed", errorCode);
+        }
+
+        @Override
+        public void onAdShowFailed(int errorCode) {
+            channel.invokeMethod("onAdShowFailed", errorCode);
+        }
+
+        @Override
+        public void onAdRewarded() {
+            channel.invokeMethod("onAdRewarded", null);
+        }
+    };
 
     public RewardedAd(Activity activity, String placementId, String id, BinaryMessenger messenger) {
-
+        super(id);
         this.activity = activity;
         this.placementId = placementId;
         channel = new MethodChannel(messenger, "adivery/rewarded_" + id);
@@ -49,42 +86,8 @@ public class RewardedAd extends AdiveryRewardedCallback implements MethodChannel
     }
 
     private void loadAd() {
-        Adivery.requestRewardedAd(activity, placementId, this);
+        Adivery.requestRewardedAd(activity, placementId, callback);
     }
 
-    @Override
-    public void onAdLoaded(AdiveryLoadedAd ad) {
-        this.ad = ad;
-        channel.invokeMethod("onAdLoaded", null);
-    }
 
-    @Override
-    public void onAdClosed() {
-        channel.invokeMethod("onAdClosed", null);
-    }
-
-    @Override
-    public void onAdShown() {
-        channel.invokeMethod("onAdShown", null);
-    }
-
-    @Override
-    public void onAdClicked() {
-        channel.invokeMethod("onAdClicked", null);
-    }
-
-    @Override
-    public void onAdLoadFailed(int errorCode) {
-        channel.invokeMethod("onAdLoadFailed", errorCode);
-    }
-
-    @Override
-    public void onAdShowFailed(int errorCode) {
-        channel.invokeMethod("onAdShowFailed", errorCode);
-    }
-
-    @Override
-    public void onAdRewarded() {
-        channel.invokeMethod("onAdRewarded", null);
-    }
 }

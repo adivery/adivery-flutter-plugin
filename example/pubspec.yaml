@@ -11,6 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^5.0.0
+  page_transition: ^2.0.2
+
 
   adivery:
     # When depending on this package from a real application you should use:
