@@ -28,10 +28,8 @@ class BannerAd extends StatefulWidget {
   final ErrorFunction onAdShowFailed;
   final EmptyFunction onAdClicked;
 
-  const BannerAd({
+  const BannerAd(this.placementId, this.bannerType,{
     Key key,
-    this.placementId,
-    this.bannerType,
     this.onAdLoaded,
     this.onAdLoadFailed,
     this.onAdShowFailed,
@@ -192,7 +190,7 @@ class NativeAd {
   final NativeAdEmptyFunction onAdClosed;
   final String id = UniqueKey().toString();
 
-  NativeAd({this.placementId,
+  NativeAd(this.placementId,{
     this.onAdLoaded,
     this.onAdClosed,
     this.onAdClicked,

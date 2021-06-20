@@ -24,9 +24,10 @@ class _MyAppState extends State<MyApp> {
     AdiveryPlugin.prepareInterstitialAd("de5db046-765d-478f-bb2e-30dc2eaf3f51");
     AdiveryPlugin.prepareRewardedAd("3f97dc4d-3e09-4024-acaf-931862c03ba8");
     AdiveryPlugin.addListener(
-      onError: onError,
+      onError: (placementId, reason) => {},
       onInterstitialLoaded: onInterstitialLoaded,
       onRewardedClosed: onRewardedClosed,
+      onRewardedLoaded: (placement) => { }
     );
   }
 
@@ -36,6 +37,9 @@ class _MyAppState extends State<MyApp> {
 
   static void onRewardedClosed(String placement, bool isRewarded) {
     print("ad rewarded: " + isRewarded.toString());
+    if (isRewarded){
+
+    }
   }
 
   static void onError(String placement, String error) {
@@ -68,8 +72,8 @@ class _MyAppState extends State<MyApp> {
     Row(
       children: <Widget>[
         BannerAd(
-          placementId: "2f71ec44-f30a-4043-9cc1-f32347a07f8b",
-          bannerType: BannerAdSize.BANNER,
+          "2f71ec44-f30a-4043-9cc1-f32347a07f8b",
+         BannerAdSize.BANNER,
           onAdLoaded: _onAdLoaded,
           onAdClicked: _onAdClicked,
         ),
@@ -78,8 +82,8 @@ class _MyAppState extends State<MyApp> {
     Row(
       children: <Widget>[
         BannerAd(
-          placementId: "ee1b7e7e-9b9b-4c91-8033-a66ca2a026ed",
-          bannerType: BannerAdSize.LARGE_BANNER,
+          "ee1b7e7e-9b9b-4c91-8033-a66ca2a026ed",
+          BannerAdSize.LARGE_BANNER,
           onAdLoaded: _onAdLoaded,
           onAdClicked: _onAdClicked,
           onAdLoadFailed: _onAdLoadFailed,
@@ -90,8 +94,8 @@ class _MyAppState extends State<MyApp> {
     Row(
       children: <Widget>[
         BannerAd(
-          placementId: "5f2c4c86-a6ec-4735-9a44-f881fe40789f",
-          bannerType: BannerAdSize.MEDIUM_RECTANGLE,
+          "5f2c4c86-a6ec-4735-9a44-f881fe40789f",
+          BannerAdSize.MEDIUM_RECTANGLE,
           onAdLoaded: _onAdLoaded,
           onAdClicked: _onAdClicked,
           onAdLoadFailed: _onAdLoadFailed,
@@ -112,8 +116,8 @@ class _MyAppState extends State<MyApp> {
       return _widgetOptions.elementAt(0);
     } else if (_index == 1) {
       return BannerAd(
-        placementId: "ee1b7e7e-9b9b-4c91-8033-a66ca2a026ed",
-        bannerType: BannerAdSize.LARGE_BANNER,
+        "ee1b7e7e-9b9b-4c91-8033-a66ca2a026ed",
+        BannerAdSize.LARGE_BANNER,
         onAdLoaded: _onAdLoaded,
         onAdClicked: _onAdClicked,
         onAdLoadFailed: _onAdLoadFailed,
@@ -278,7 +282,7 @@ class _MyAppState extends State<MyApp> {
 
   void _loadNative() {
     nativeAd = new NativeAd(
-      placementId: "103ea0d3-7b1d-458e-ac9d-a3165e7634d2",
+      "103ea0d3-7b1d-458e-ac9d-a3165e7634d2",
       onAdLoaded: _onNativeAdLoaded,
     );
     nativeAd.loadAd();
