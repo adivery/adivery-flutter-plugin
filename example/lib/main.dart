@@ -21,6 +21,25 @@ class _MyAppState extends State<MyApp> {
   void initPlatformState() {
     AdiveryPlugin.initialize("7e27fb38-5aff-473a-998f-437b89426f66");
     AdiveryPlugin.setLoggingEnabled(true);
+    AdiveryPlugin.prepareInterstitialAd("de5db046-765d-478f-bb2e-30dc2eaf3f51");
+    AdiveryPlugin.prepareRewardedAd("3f97dc4d-3e09-4024-acaf-931862c03ba8");
+    AdiveryPlugin.addListener(
+      onError: onError,
+      onInterstitialLoaded: onInterstitialLoaded,
+      onRewardedClosed: onRewardedClosed,
+    );
+  }
+
+  static void onInterstitialLoaded(String placement) {
+    print("interstitial loaded");
+  }
+
+  static void onRewardedClosed(String placement, bool isRewarded) {
+    print("ad rewarded: " + isRewarded.toString());
+  }
+
+  static void onError(String placement, String error) {
+    print("onError" + error);
   }
 
   static void _onAdLoaded(Ad ad) {
@@ -44,10 +63,6 @@ class _MyAppState extends State<MyApp> {
   int _reward = 0;
 
   NativeAd nativeAd;
-
-  InterstitialAd interstitialAd;
-
-  RewardedAd rewardedAd;
 
   List<Widget> _widgetOptions = <Widget>[
     Row(
@@ -110,28 +125,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   _loadInterstitial() {
-    interstitialAd = InterstitialAd(
-            placementId: "de5db046-765d-478f-bb2e-30dc2eaf3f51",
-            onAdLoaded: (ad) {
-              ad.show();
-            },
-            onAdShown: (ad) {
-              print("interstitialAd shown");
-            },
-            onAdLoadFailed: (ad, code) {
-              print("interstitial show ad failed");
-            },
-            onAdClicked: (ad) {
-              print("interstitial ad clicked");
-            },
-            onAdClosed: (ad) {
-              print("interstitial ad closed");
-              interstitialAd.destroy();
-            },
-            onAdShowFailed: (ad, code){
-              print("interstitial ad show failed");
-            });
-    interstitialAd.loadAd();
+    var placementId = "de5db046-765d-478f-bb2e-30dc2eaf3f51";
+    AdiveryPlugin.isLoaded(placementId)
+        .then((isLoaded) => showPlacement(isLoaded, placementId));
   }
 
   @override
@@ -214,21 +210,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _loadRewardedAd() {
-    rewardedAd = RewardedAd(
-        placementId: "3f97dc4d-3e09-4024-acaf-931862c03ba8",
-        onAdLoaded: (ad) {
-          ad.show();
-        },
-        onAdRewarded: (ad) {
-          print("Ad rewarded");
-          setState(() {
-            _reward += 100;
-          });
-        },
-        onAdClosed: (ad) {
-          rewardedAd.destroy();
-    });
-    rewardedAd.loadAd();
+    var placementId = "3f97dc4d-3e09-4024-acaf-931862c03ba8";
+    AdiveryPlugin.isLoaded(placementId)
+        .then((isLoaded) => showPlacement(isLoaded, placementId));
   }
 
   Widget _nativeAd() {
@@ -294,8 +278,8 @@ class _MyAppState extends State<MyApp> {
 
   void _loadNative() {
     nativeAd = new NativeAd(
-        placementId: "103ea0d3-7b1d-458e-ac9d-a3165e7634d2",
-        onAdLoaded: _onNativeAdLoaded,
+      placementId: "103ea0d3-7b1d-458e-ac9d-a3165e7634d2",
+      onAdLoaded: _onNativeAdLoaded,
     );
     nativeAd.loadAd();
     // call nativeAd.destroy(); when Widget removed;
@@ -303,5 +287,11 @@ class _MyAppState extends State<MyApp> {
 
   void _onNativeAdLoaded() {
     setState(() {});
+  }
+
+  void showPlacement(bool isLoaded, String placementId) {
+    if (isLoaded) {
+      AdiveryPlugin.show(placementId);
+    }
   }
 }

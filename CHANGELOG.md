@@ -1,10 +1,16 @@
+## 4.0.0
+* Auto reload ads
+* Simple implementation and callbacks
+* Bug fix
+* Update to Adivery SDK version 4.0.0
+
 ## 3.4.0
-* update to version 3.4.1 of adivery
-* fix requesting ads multiple times
+* Update to version 3.4.1 of adivery
+* Fix requesting ads multiple times
 
 ## 3.3.0
-* updated to version 3.3.2 of adivery
-* fix versioning that matches adivery sdk versioning.
+* Updated to version 3.3.2 of adivery
+* Fix versioning that matches adivery sdk versioning.
 
 ## 1.0.3
 

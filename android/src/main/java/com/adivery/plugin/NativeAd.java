@@ -8,8 +8,8 @@ import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
 
 import com.adivery.sdk.Adivery;
-import com.adivery.sdk.AdiveryNativeAd;
 import com.adivery.sdk.AdiveryNativeCallback;
+import com.adivery.sdk.networks.adivery.AdiveryNativeAd;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
@@ -26,13 +26,13 @@ public class NativeAd extends BaseAd implements MethodChannel.MethodCallHandler 
     private AdiveryNativeAd ad;
     private final AdiveryNativeCallback callback = new AdiveryNativeCallback() {
         @Override
-        public void onAdShowFailed(int errorCode) {
-            channel.invokeMethod("onAdShowFailed", errorCode);
+        public void onAdShowFailed(@NonNull String reason) {
+            channel.invokeMethod("onError", reason);
         }
 
         @Override
-        public void onAdLoadFailed(int errorCode) {
-            channel.invokeMethod("onAdLoadFailed", errorCode);
+        public void onAdLoadFailed(@NonNull String reason) {
+            channel.invokeMethod("onError", reason);
         }
 
         @Override
@@ -46,17 +46,20 @@ public class NativeAd extends BaseAd implements MethodChannel.MethodCallHandler 
         }
 
         @Override
-        public void onAdLoaded(AdiveryNativeAd ad) {
-            NativeAd.this.ad = ad;
+        public void onAdLoaded(@NonNull com.adivery.sdk.NativeAd ad) {
+            if (!(ad instanceof AdiveryNativeAd)){
+                return;
+            }
+            NativeAd.this.ad = (AdiveryNativeAd) ad;
             Map<String, Object> data = new HashMap<>();
-            data.put("headline", ad.getHeadline());
-            data.put("description", ad.getDescription());
-            data.put("advertiser", ad.getAdvertiser());
-            data.put("call_to_action", ad.getCallToAction());
-            data.put("icon", readDrawable(ad.getIcon()));
-            data.put("image", readDrawable(ad.getImage()));
+            data.put("headline", NativeAd.this.ad.getHeadline());
+            data.put("description", NativeAd.this.ad.getDescription());
+            data.put("advertiser", NativeAd.this.ad.getAdvertiser());
+            data.put("call_to_action", NativeAd.this.ad.getCallToAction());
+            data.put("icon", readDrawable(NativeAd.this.ad.getIcon()));
+            data.put("image", readDrawable(NativeAd.this.ad.getImage()));
             channel.invokeMethod("onAdLoaded", data);
-            ad.recordImpression();
+            NativeAd.this.ad.recordImpression();
         }
     };
 
@@ -87,11 +90,8 @@ public class NativeAd extends BaseAd implements MethodChannel.MethodCallHandler 
 
     private void loadAd() {
         Adivery.requestNativeAd(activity, placementId, callback);
-
     }
-
-
-
+    
     private byte[] readDrawable(Drawable drawable) {
         BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
         Bitmap bitmap = bitmapDrawable.getBitmap();
