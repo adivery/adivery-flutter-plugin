@@ -24,11 +24,10 @@ class _MyAppState extends State<MyApp> {
     AdiveryPlugin.prepareInterstitialAd("de5db046-765d-478f-bb2e-30dc2eaf3f51");
     AdiveryPlugin.prepareRewardedAd("3f97dc4d-3e09-4024-acaf-931862c03ba8");
     AdiveryPlugin.addListener(
-      onError: (placementId, reason) => {},
-      onInterstitialLoaded: onInterstitialLoaded,
-      onRewardedClosed: onRewardedClosed,
-      onRewardedLoaded: (placement) => { }
-    );
+        onError: (placementId, reason) => {},
+        onInterstitialLoaded: onInterstitialLoaded,
+        onRewardedClosed: onRewardedClosed,
+        onRewardedLoaded: (placement) => {});
   }
 
   static void onInterstitialLoaded(String placement) {
@@ -37,9 +36,7 @@ class _MyAppState extends State<MyApp> {
 
   static void onRewardedClosed(String placement, bool isRewarded) {
     print("ad rewarded: " + isRewarded.toString());
-    if (isRewarded){
-
-    }
+    if (isRewarded) {}
   }
 
   static void onError(String placement, String error) {
@@ -54,12 +51,8 @@ class _MyAppState extends State<MyApp> {
     print("banner clicked");
   }
 
-  static void _onAdLoadFailed(Ad ad, int error) {
-    print("banner load failed");
-  }
-
-  static void _onAdShowFailed(Ad ad, int error) {
-    print("banner show failed");
+  static void _onError(Ad ad, String error) {
+    print("banner load failed " + error);
   }
 
   static int _index = 0;
@@ -73,7 +66,7 @@ class _MyAppState extends State<MyApp> {
       children: <Widget>[
         BannerAd(
           "2f71ec44-f30a-4043-9cc1-f32347a07f8b",
-         BannerAdSize.BANNER,
+          BannerAdSize.BANNER,
           onAdLoaded: _onAdLoaded,
           onAdClicked: _onAdClicked,
         ),
@@ -86,8 +79,7 @@ class _MyAppState extends State<MyApp> {
           BannerAdSize.LARGE_BANNER,
           onAdLoaded: _onAdLoaded,
           onAdClicked: _onAdClicked,
-          onAdLoadFailed: _onAdLoadFailed,
-          onAdShowFailed: _onAdShowFailed,
+          onError: _onError,
         ),
       ],
     ),
@@ -98,8 +90,7 @@ class _MyAppState extends State<MyApp> {
           BannerAdSize.MEDIUM_RECTANGLE,
           onAdLoaded: _onAdLoaded,
           onAdClicked: _onAdClicked,
-          onAdLoadFailed: _onAdLoadFailed,
-          onAdShowFailed: _onAdShowFailed,
+          onError: _onError,
         ),
       ],
     ),
@@ -120,8 +111,7 @@ class _MyAppState extends State<MyApp> {
         BannerAdSize.LARGE_BANNER,
         onAdLoaded: _onAdLoaded,
         onAdClicked: _onAdClicked,
-        onAdLoadFailed: _onAdLoadFailed,
-        onAdShowFailed: _onAdShowFailed,
+        onError: _onError,
       );
     } else {
       return _widgetOptions.elementAt(2);

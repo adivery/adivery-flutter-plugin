@@ -11,68 +11,60 @@ abstract class Ad {
 }
 
 typedef NativeAdEmptyFunction = void Function();
-typedef NativeAdErrorFunction = void Function(int errorCode);
+typedef NativeAdErrorFunction = void Function(String reason);
 
 typedef EmptyFunction = void Function(Ad ad);
-typedef ErrorFunction = void Function(Ad ad, int errorCode);
+typedef ErrorFunction = void Function(Ad ad, String reason);
 typedef NativeAdFunction = void Function(Map<dynamic, dynamic> nativeAd);
 
 enum BannerAdSize { BANNER, LARGE_BANNER, MEDIUM_RECTANGLE }
 
 class BannerAd extends StatefulWidget {
   final String placementId;
-  final BannerAdSize bannerType;
+  final BannerAdSize bannerSize;
 
-  final EmptyFunction onAdLoaded;
-  final ErrorFunction onAdLoadFailed;
-  final ErrorFunction onAdShowFailed;
-  final EmptyFunction onAdClicked;
+  final EmptyFunction? onAdLoaded;
+  final ErrorFunction? onError;
+  final EmptyFunction? onAdClicked;
 
-  const BannerAd(this.placementId, this.bannerType,{
-    Key key,
+
+  const BannerAd(
+    this.placementId,
+    this.bannerSize, {
+    Key? key,
     this.onAdLoaded,
-    this.onAdLoadFailed,
-    this.onAdShowFailed,
+    this.onError,
     this.onAdClicked,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() =>
-      _TextViewState(
-          placementId: placementId,
-          bannerType: bannerType,
-          onAdClicked: onAdClicked,
-          onAdLoaded: onAdLoaded,
-          onAdLoadFailed: onAdLoadFailed,
-          onAdShowFailed: onAdShowFailed);
+  State<StatefulWidget> createState() => _TextViewState(placementId, bannerSize,
+      onAdClicked: onAdClicked,
+      onAdLoaded: onAdLoaded,
+      onError: onError);
 }
 
 class _TextViewState extends State<BannerAd> {
   final String placementId;
   final BannerAdSize bannerType;
 
-  final EmptyFunction onAdLoaded;
-  final ErrorFunction onAdLoadFailed;
-  final ErrorFunction onAdShowFailed;
-  final EmptyFunction onAdClicked;
+  final EmptyFunction? onAdLoaded;
+  final ErrorFunction? onError;
+  final EmptyFunction? onAdClicked;
 
-  _TextViewState({
+  _TextViewState(
     this.placementId,
-    this.bannerType,
+    this.bannerType, {
     this.onAdLoaded,
-    this.onAdLoadFailed,
-    this.onAdShowFailed,
+    this.onError,
     this.onAdClicked,
   }) : super();
 
   void _onPlatformViewCreated(int id) {
-    BannerAdEventHandler handler = new BannerAdEventHandler(
-        id: id,
-        bannerType: bannerType,
+    BannerAdEventHandler handler = new BannerAdEventHandler(id, bannerType,
         onAdLoaded: onAdLoaded,
         onAdClicked: onAdClicked,
-        onAdShowFailed: onAdShowFailed,
-        onAdLoadFailed: onAdLoadFailed);
+        onError: onError);
     handler.openChannel();
   }
 
@@ -97,7 +89,7 @@ class _TextViewState extends State<BannerAd> {
         '$defaultTargetPlatform is not yet supported by the adivery plugin');
   }
 
-  double getBannerHeight(BannerAdSize bannerType) {
+  double getBannerHeight(BannerAdSize? bannerType) {
     if (bannerType == BannerAdSize.BANNER) {
       return 50;
     } else if (bannerType == BannerAdSize.LARGE_BANNER) {
@@ -107,7 +99,7 @@ class _TextViewState extends State<BannerAd> {
     }
   }
 
-  double getBannerWidth(BannerAdSize bannerType) {
+  double getBannerWidth(BannerAdSize? bannerType) {
     if (bannerType == BannerAdSize.BANNER) {
       return 320;
     } else if (bannerType == BannerAdSize.LARGE_BANNER) {
@@ -130,21 +122,19 @@ class _TextViewState extends State<BannerAd> {
 
 class BannerAdEventHandler extends Ad {
   final int id;
-  final BannerAdSize bannerType;
+  final BannerAdSize bannerSize;
 
-  final EmptyFunction onAdLoaded;
-  final ErrorFunction onAdLoadFailed;
-  final ErrorFunction onAdShowFailed;
-  final EmptyFunction onAdClicked;
+  final EmptyFunction? onAdLoaded;
+  final ErrorFunction? onError;
+  final EmptyFunction? onAdClicked;
 
-  MethodChannel _channel;
+  late MethodChannel _channel;
 
-  BannerAdEventHandler({
+  BannerAdEventHandler(
     this.id,
-    this.bannerType,
+    this.bannerSize, {
     this.onAdLoaded,
-    this.onAdLoadFailed,
-    this.onAdShowFailed,
+    this.onError,
     this.onAdClicked,
   });
 
@@ -156,16 +146,16 @@ class BannerAdEventHandler extends Ad {
   Future<dynamic> handle(MethodCall call) {
     switch (call.method) {
       case "onAdLoaded":
-        onAdLoaded(this);
+        onAdLoaded?.call(this);
         break;
       case "onAdClicked":
-        onAdClicked(this);
+        onAdClicked?.call(this);
         break;
       case "onAdLoadFailed":
-        onAdLoadFailed(this, call.arguments as int);
+        onError?.call(this, call.arguments as String);
         break;
       case "onAdShowFailed":
-        onAdShowFailed(this, call.arguments as int);
+        onError?.call(this, call.arguments as String);
         break;
     }
     return true as dynamic;
@@ -182,59 +172,58 @@ class NativeAd {
   static const MethodChannel _channel = const MethodChannel('adivery_plugin');
 
   final String placementId;
-  final NativeAdEmptyFunction onAdLoaded;
-  final NativeAdEmptyFunction onAdClicked;
-  final NativeAdEmptyFunction onAdShown;
-  final NativeAdErrorFunction onAdShowFailed;
-  final NativeAdErrorFunction onAdLoadFailed;
-  final NativeAdEmptyFunction onAdClosed;
+  final NativeAdEmptyFunction? onAdLoaded;
+  final NativeAdEmptyFunction? onAdClicked;
+  final NativeAdEmptyFunction? onAdShown;
+  final NativeAdErrorFunction? onError;
+  final NativeAdEmptyFunction? onAdClosed;
   final String id = UniqueKey().toString();
 
-  NativeAd(this.placementId,{
-    this.onAdLoaded,
-    this.onAdClosed,
-    this.onAdClicked,
-    this.onAdShowFailed,
-    this.onAdLoadFailed,
-    this.onAdShown});
 
-  NativeAdEventHandler _handler;
+  NativeAd(this.placementId,
+      {this.onAdLoaded,
+      this.onAdClosed,
+      this.onAdClicked,
+      this.onError,
+      this.onAdShown});
 
-  String headline;
-  String description;
-  Image icon;
-  Image image;
-  String callToAction;
-  String advertiser;
+  late NativeAdEventHandler _handler;
+
+  String? headline;
+  String? description;
+  Image? icon;
+  Image? image;
+  String? callToAction;
+  String? advertiser;
   bool isLoaded = false;
 
   void loadAd() {
     _channel.invokeMethod("native", {"placement_id": placementId, "id": id});
     _handler = new NativeAdEventHandler(
-        onAdLoaded: (data) {
-          headline = data['headline'];
-          description = data['description'];
-          callToAction = data['call_to_action'];
-          advertiser = data['advertiser'];
-          if (data['icon'] != null) {
-            Uint8List list = data['icon'];
-            icon = Image.memory(list);
-          }
-          if (data['image'] != null) {
-            Uint8List list = data['image'];
-            image = Image.memory(list);
-          }
-          isLoaded = true;
+      id,
+      placementId,
+      onAdLoaded: (data) {
+        headline = data['headline'];
+        description = data['description'];
+        callToAction = data['call_to_action'];
+        advertiser = data['advertiser'];
+        if (data['icon'] != null) {
+          Uint8List list = data['icon'];
+          icon = Image.memory(list);
+        }
+        if (data['image'] != null) {
+          Uint8List list = data['image'];
+          image = Image.memory(list);
+        }
+        isLoaded = true;
 
-          onAdLoaded();
-        },
-        onAdShown: onAdShown,
-        onAdClosed: onAdClosed,
-        onAdClicked: onAdClicked,
-        onAdShowFailed: onAdShowFailed,
-        onAdLoadFailed: onAdLoadFailed,
-        placementId: placementId,
-        id: id);
+        onAdLoaded?.call();
+      },
+      onAdShown: onAdShown,
+      onAdClosed: onAdClosed,
+      onAdClicked: onAdClicked,
+      onError: onError,
+    );
     _handler.openChannel();
     _handler.loadAd();
   }
@@ -242,31 +231,29 @@ class NativeAd {
   void recordClick() {
     _handler.recordClick();
   }
-  void destroy(){
+
+  void destroy() {
     _channel.invokeListMethod("destroyAd", id);
   }
 }
 
 class NativeAdEventHandler {
   final String placementId;
-  final NativeAdFunction onAdLoaded;
-  final NativeAdEmptyFunction onAdClicked;
-  final NativeAdEmptyFunction onAdShown;
-  final NativeAdErrorFunction onAdShowFailed;
-  final NativeAdErrorFunction onAdLoadFailed;
-  final NativeAdEmptyFunction onAdClosed;
+  final NativeAdFunction? onAdLoaded;
+  final NativeAdEmptyFunction? onAdClicked;
+  final NativeAdEmptyFunction? onAdShown;
+  final NativeAdErrorFunction? onError;
+  final NativeAdEmptyFunction? onAdClosed;
   final String id;
 
-  NativeAdEventHandler({this.id,
-    this.placementId,
-    this.onAdLoaded,
-    this.onAdClosed,
-    this.onAdClicked,
-    this.onAdShowFailed,
-    this.onAdLoadFailed,
-    this.onAdShown});
+  NativeAdEventHandler(this.id, this.placementId,
+      {this.onAdLoaded,
+      this.onAdClosed,
+      this.onAdClicked,
+      this.onError,
+      this.onAdShown});
 
-  MethodChannel _channel;
+  late MethodChannel _channel;
 
   void openChannel() {
     _channel = new MethodChannel("adivery/native_" + id);
@@ -276,22 +263,22 @@ class NativeAdEventHandler {
   Future<dynamic> handle(MethodCall call) {
     switch (call.method) {
       case "onAdLoaded":
-        onAdLoaded(call.arguments);
+        onAdLoaded?.call(call.arguments);
         break;
       case "onAdClicked":
-        onAdClicked();
+        onAdClicked?.call();
         break;
       case "onAdLoadFailed":
-        onAdLoadFailed(call.arguments as int);
+        onError?.call(call.arguments as String);
         break;
       case "onAdShowFailed":
-        onAdShowFailed(call.arguments as int);
+        onError?.call(call.arguments as String);
         break;
       case "onAdShown":
-        onAdShown();
+        onAdShown?.call();
         break;
       case "onAdClosed":
-        onAdClosed();
+        onAdClosed?.call();
         break;
     }
     return true as dynamic;

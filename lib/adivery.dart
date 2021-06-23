@@ -6,26 +6,26 @@ typedef RewardFunction = void Function(String placement, bool isRewarded);
 
 class AdiveryPlugin {
   static const MethodChannel _channel = const MethodChannel('adivery_plugin');
-  static EmptyFunction _onInterstitialLoaded;
-  static EmptyFunction _onInterstitialClicked;
-  static EmptyFunction _onInterstitialShown;
-  static EmptyFunction _onInterstitialClosed;
-  static EmptyFunction _onRewardedLoaded;
-  static EmptyFunction _onRewardedClicked;
-  static EmptyFunction _onRewardedShown;
-  static RewardFunction _onRewardedClosed;
-  static ErrorFunction _onError;
+  static EmptyFunction? _onInterstitialLoaded;
+  static EmptyFunction? _onInterstitialClicked;
+  static EmptyFunction? _onInterstitialShown;
+  static EmptyFunction? _onInterstitialClosed;
+  static EmptyFunction? _onRewardedLoaded;
+  static EmptyFunction? _onRewardedClicked;
+  static EmptyFunction? _onRewardedShown;
+  static RewardFunction? _onRewardedClosed;
+  static ErrorFunction? _onError;
 
   static void addListener(
-      {EmptyFunction onInterstitialLoaded,
-      EmptyFunction onInterstitialClicked,
-      EmptyFunction onInterstitialShown,
-      EmptyFunction onInterstitialClosed,
-      EmptyFunction onRewardedLoaded,
-      EmptyFunction onRewardedClicked,
-      EmptyFunction onRewardedShown,
-      RewardFunction onRewardedClosed,
-      ErrorFunction onError}) {
+      {EmptyFunction? onInterstitialLoaded,
+      EmptyFunction? onInterstitialClicked,
+      EmptyFunction? onInterstitialShown,
+      EmptyFunction? onInterstitialClosed,
+      EmptyFunction? onRewardedLoaded,
+      EmptyFunction? onRewardedClicked,
+      EmptyFunction? onRewardedShown,
+      RewardFunction? onRewardedClosed,
+      ErrorFunction? onError}) {
     _onError = onError;
     _onInterstitialClicked = onInterstitialClicked;
     _onInterstitialClosed = onInterstitialClosed;
@@ -58,7 +58,7 @@ class AdiveryPlugin {
     await _channel.invokeMethod("rewarded", placementId);
   }
 
-  static Future<bool> isLoaded(String placementId) async {
+  static Future<bool?> isLoaded(String placementId) async {
     return _channel.invokeMethod("isLoaded", placementId);
   }
 
@@ -69,55 +69,37 @@ class AdiveryPlugin {
   static _handleMethodCall(MethodCall call) {
     switch (call.method) {
       case "onRewardedAdShown":
-        if (_onRewardedShown != null) {
-          _onRewardedShown(call.arguments as String);
-        }
+        _onRewardedShown?.call((call.arguments as String));
         break;
       case "onRewardedAdLoaded":
-        if (_onRewardedLoaded != null) {
-          _onRewardedLoaded(call.arguments as String);
-        }
+        _onRewardedLoaded?.call(call.arguments as String);
         break;
       case "onRewardedAdClosed":
-        if (_onRewardedClosed != null) {
-          var args = call.arguments as Map<dynamic, dynamic>;
-          var placement = args["placement_id"] as String;
-          var isRewarded = args["is_rewarded"] as bool;
-          _onRewardedClosed(placement, isRewarded);
-        }
+        var args = call.arguments as Map<dynamic, dynamic>;
+        var placement = args["placement_id"] as String;
+        var isRewarded = args["is_rewarded"] as bool;
+        _onRewardedClosed?.call(placement, isRewarded);
         break;
       case "onRewardedAdClicked":
-        if (_onRewardedClicked != null) {
-          _onRewardedClicked(call.arguments as String);
-        }
+        _onRewardedClicked?.call(call.arguments as String);
         break;
       case "onInterstitialAdShown":
-        if (_onInterstitialShown != null) {
-          _onInterstitialShown(call.arguments as String);
-        }
+        _onInterstitialShown?.call(call.arguments as String);
         break;
       case "onInterstitialAdLoaded":
-        if (_onInterstitialLoaded != null) {
-          _onInterstitialLoaded(call.arguments as String);
-        }
+        _onInterstitialLoaded?.call(call.arguments as String);
         break;
       case "onInterstitialAdClosed":
-        if (_onInterstitialClosed != null) {
-          _onInterstitialClosed(call.arguments as String);
-        }
+        _onInterstitialClosed?.call(call.arguments as String);
         break;
       case "onInterstitialAdClicked":
-        if (_onInterstitialClicked != null) {
-          _onInterstitialClicked(call.arguments as String);
-        }
+        _onInterstitialClicked?.call(call.arguments as String);
         break;
       case "onError":
-        if (_onError != null) {
-          var args = call.arguments as Map<dynamic, dynamic>;
-          var placement = args["placement_id"] as String;
-          var reason = args["reason"] as String;
-          _onError(placement, reason);
-        }
+        var args = call.arguments as Map<dynamic, dynamic>;
+        var placement = args["placement_id"] as String;
+        var reason = args["reason"] as String;
+        _onError?.call(placement, reason);
         break;
     }
   }

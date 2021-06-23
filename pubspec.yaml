@@ -1,10 +1,10 @@
 name: adivery
 description: A Simple flutter plugin that activates Adivery ads on flutter.
-version: 4.0.0
+version: 4.0.1
 homepage: https://adivery.com
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
   flutter: ">=1.10.0"
 
 dependencies:
