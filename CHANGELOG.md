@@ -1,3 +1,9 @@
+# 4.0.2
+* fix admob banner
+
+# 4.0.1
+* migrate to null safety
+
 ## 4.0.0
 * Auto reload ads
 * Simple implementation and callbacks
