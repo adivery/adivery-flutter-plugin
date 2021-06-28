@@ -2,10 +2,6 @@ package com.adivery.plugin;
 
 
 import android.app.Activity;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
 import com.adivery.sdk.Adivery;
 import com.adivery.sdk.AdiveryListener;
 
@@ -36,17 +32,17 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
 
   private final AdiveryListener listener = new AdiveryListener(){
     @Override
-    public void onRewardedAdShown(@NonNull String placementId) {
+    public void onRewardedAdShown(String placementId) {
       channel.invokeMethod("onRewardedAdShown", placementId);
     }
 
     @Override
-    public void onRewardedAdLoaded(@NonNull String placementId) {
+    public void onRewardedAdLoaded(String placementId) {
       channel.invokeMethod("onRewardedAdLoaded", placementId);
     }
 
     @Override
-    public void onRewardedAdClosed(@NonNull String placementId, boolean isRewarded) {
+    public void onRewardedAdClosed(String placementId, boolean isRewarded) {
       Map<String, Object> arguments = new HashMap<>();
       arguments.put("placement_id", placementId);
       arguments.put("is_rewarded", isRewarded);
@@ -54,32 +50,32 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
     }
 
     @Override
-    public void onRewardedAdClicked(@NonNull String placementId) {
+    public void onRewardedAdClicked(String placementId) {
       channel.invokeMethod("onRewardedAdClicked", placementId);
     }
 
     @Override
-    public void onInterstitialAdShown(@NonNull String placementId) {
+    public void onInterstitialAdShown(String placementId) {
       channel.invokeMethod("onInterstitialAdShown", placementId);
     }
 
     @Override
-    public void onInterstitialAdLoaded(@NonNull String placementId) {
+    public void onInterstitialAdLoaded(String placementId) {
       channel.invokeMethod("onInterstitialAdLoaded", placementId);
     }
 
     @Override
-    public void onInterstitialAdClosed(@NonNull String placementId) {
+    public void onInterstitialAdClosed(String placementId) {
       channel.invokeMethod("onInterstitialAdClosed", placementId);
     }
 
     @Override
-    public void onInterstitialAdClicked(@NonNull String placementId) {
+    public void onInterstitialAdClicked(String placementId) {
       channel.invokeMethod("onInterstitialAdClicked", placementId);
     }
 
     @Override
-    public void onError(@NonNull String placementId, @NonNull String reason) {
+    public void onError(String placementId, String reason) {
       Map<String, String> arguments = new HashMap<>();
       arguments.put("placement_id", placementId);
       arguments.put("reason", reason);
@@ -117,7 +113,7 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
   }
 
   @Override
-  public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
+  public void onMethodCall(MethodCall call, Result result) {
     switch (call.method) {
       case "initialize":
         Adivery.configure(activity.getApplication(), (String) call.argument("appId"));
@@ -180,13 +176,13 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
   }
 
   @Override
-  public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+  public void onDetachedFromEngine(FlutterPluginBinding binding) {
     channel.setMethodCallHandler(null);
     Adivery.removeListener(listener);
   }
 
   @Override
-  public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+  public void onAttachedToActivity(ActivityPluginBinding binding) {
     activity = binding.getActivity();
   }
 
@@ -196,7 +192,7 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
   }
 
   @Override
-  public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+  public void onReattachedToActivityForConfigChanges(ActivityPluginBinding binding) {
 
   }
 

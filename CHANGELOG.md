@@ -1,3 +1,6 @@
+# 4.0.3
+* fix crash on projects without androidX.
+
 # 4.0.2
 * fix admob banner
 

@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
-import androidx.annotation.NonNull;
-
 import com.adivery.sdk.Adivery;
 import com.adivery.sdk.AdiveryNativeCallback;
 import com.adivery.sdk.networks.adivery.AdiveryNativeAd;
@@ -26,12 +24,12 @@ public class NativeAd extends BaseAd implements MethodChannel.MethodCallHandler 
     private AdiveryNativeAd ad;
     private final AdiveryNativeCallback callback = new AdiveryNativeCallback() {
         @Override
-        public void onAdShowFailed(@NonNull String reason) {
+        public void onAdShowFailed(String reason) {
             channel.invokeMethod("onError", reason);
         }
 
         @Override
-        public void onAdLoadFailed(@NonNull String reason) {
+        public void onAdLoadFailed(String reason) {
             channel.invokeMethod("onError", reason);
         }
 
@@ -46,7 +44,7 @@ public class NativeAd extends BaseAd implements MethodChannel.MethodCallHandler 
         }
 
         @Override
-        public void onAdLoaded(@NonNull com.adivery.sdk.NativeAd ad) {
+        public void onAdLoaded(com.adivery.sdk.NativeAd ad) {
             if (!(ad instanceof AdiveryNativeAd)){
                 return;
             }
@@ -72,7 +70,7 @@ public class NativeAd extends BaseAd implements MethodChannel.MethodCallHandler 
     }
 
     @Override
-    public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    public void onMethodCall(MethodCall call, MethodChannel.Result result) {
         switch (call.method) {
             case "loadAd":
                 loadAd();
