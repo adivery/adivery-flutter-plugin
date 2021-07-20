@@ -2,6 +2,7 @@ package com.adivery.plugin;
 
 
 import android.app.Activity;
+
 import com.adivery.sdk.Adivery;
 import com.adivery.sdk.AdiveryListener;
 
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.flutter.Log;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -29,6 +31,7 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
   private static BinaryMessenger messenger;
   private MethodChannel channel;
   private final List<BaseAd> ads = new ArrayList<>();
+  private boolean isInitialized = false;
 
   private final AdiveryListener listener = new AdiveryListener(){
     @Override
@@ -118,7 +121,7 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
       case "initialize":
         Adivery.configure(activity.getApplication(), (String) call.argument("appId"));
         Adivery.addListener(listener);
-
+        isInitialized = true;
         break;
       case "setLoggingEnabled":
         Boolean isLoggingEnabled = call.argument("isLoggingEnabled");
@@ -177,8 +180,11 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
 
   @Override
   public void onDetachedFromEngine(FlutterPluginBinding binding) {
+    Log.d("AdiveryPlugin", "detached from engine");
     channel.setMethodCallHandler(null);
-    Adivery.removeListener(listener);
+    if (isInitialized) {
+      Adivery.removeListener(listener);
+    }
   }
 
   @Override
