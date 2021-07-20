@@ -1,3 +1,6 @@
+$# 4.0.4
+* fix crash on apps that have background service.
+
 # 4.0.3
 * fix crash on projects without androidX.
 
