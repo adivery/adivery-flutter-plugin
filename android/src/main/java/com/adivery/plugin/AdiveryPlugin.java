@@ -89,6 +89,9 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
 
   @Override
   public void onAttachedToEngine(FlutterPluginBinding flutterPluginBinding) {
+    if (messenger != null){
+      return;
+    }
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(),
         "adivery_plugin");
     channel.setMethodCallHandler(this);
@@ -103,6 +106,9 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
 
   // handling flutter api v1
   public static void registerWith(Registrar registrar) {
+    if (messenger != null){
+      return;
+    }
     final MethodChannel channel = new MethodChannel(registrar.messenger(), "adivery_plugin");
     channel.setMethodCallHandler(new AdiveryPlugin());
 
@@ -182,6 +188,7 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
   public void onDetachedFromEngine(FlutterPluginBinding binding) {
     Log.d("AdiveryPlugin", "detached from engine");
     channel.setMethodCallHandler(null);
+    messenger = null;
     if (isInitialized) {
       Adivery.removeListener(listener);
     }

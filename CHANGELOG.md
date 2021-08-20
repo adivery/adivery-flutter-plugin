@@ -1,4 +1,7 @@
-$# 4.0.4
+# 4.0.5
+* fix crash on native loadAd.
+
+# 4.0.4
 * fix crash on apps that have background service.
 
 # 4.0.3
