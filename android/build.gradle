@@ -16,7 +16,7 @@ buildscript {
 }
 
 repositories {
-    mavenLocal()
+    mavenCentral()
     google()
     jcenter()
     maven {
@@ -39,5 +39,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.adivery:sdk:4.0.6'
+    implementation 'com.adivery:sdk:4.1.1'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.10'
 }

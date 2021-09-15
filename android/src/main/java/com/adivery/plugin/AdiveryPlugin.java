@@ -5,6 +5,7 @@ import android.app.Activity;
 
 import com.adivery.sdk.Adivery;
 import com.adivery.sdk.AdiveryListener;
+import com.adivery.sdk.networks.adivery.AdiveryNativeAd;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,7 +79,7 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
     }
 
     @Override
-    public void onError(String placementId, String reason) {
+    public void log(String placementId, String reason) {
       Map<String, String> arguments = new HashMap<>();
       arguments.put("placement_id", placementId);
       arguments.put("reason", reason);
@@ -150,6 +151,7 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
         break;
       case "destroyAd":
         destroyAd((String) call.arguments);
+        break;
       default:
         result.notImplemented();
     }

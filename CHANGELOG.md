@@ -1,3 +1,9 @@
+#4.1.0
+* update to latest Adivery SDK
+* add support to 3 more ad networks
+* fix sdk request rate
+* update video ads layout
+
 # 4.0.5
 * fix crash on native loadAd.
 
