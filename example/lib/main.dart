@@ -12,10 +12,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  static _MyAppState instance;
+
   @override
   void initState() {
     super.initState();
     initPlatformState();
+    instance = this;
   }
 
   void initPlatformState() {
@@ -36,7 +39,11 @@ class _MyAppState extends State<MyApp> {
 
   static void onRewardedClosed(String placement, bool isRewarded) {
     print("ad rewarded: " + isRewarded.toString());
-    if (isRewarded) {}
+    if (isRewarded) {
+      instance.setState(() {
+        instance._reward += 1;
+      });
+    }
   }
 
   static void onError(String placement, String error) {
@@ -75,7 +82,7 @@ class _MyAppState extends State<MyApp> {
     Row(
       children: <Widget>[
         BannerAd(
-          "ee1b7e7e-9b9b-4c91-8033-a66ca2a026ed",
+          "2f71ec44-f30a-4043-9cc1-f32347a07f8b",
           BannerAdSize.LARGE_BANNER,
           onAdLoaded: _onAdLoaded,
           onAdClicked: _onAdClicked,
@@ -86,7 +93,7 @@ class _MyAppState extends State<MyApp> {
     Row(
       children: <Widget>[
         BannerAd(
-          "5f2c4c86-a6ec-4735-9a44-f881fe40789f",
+          "2f71ec44-f30a-4043-9cc1-f32347a07f8b",
           BannerAdSize.MEDIUM_RECTANGLE,
           onAdLoaded: _onAdLoaded,
           onAdClicked: _onAdClicked,
@@ -107,7 +114,7 @@ class _MyAppState extends State<MyApp> {
       return _widgetOptions.elementAt(0);
     } else if (_index == 1) {
       return BannerAd(
-        "ee1b7e7e-9b9b-4c91-8033-a66ca2a026ed",
+        "2f71ec44-f30a-4043-9cc1-f32347a07f8b",
         BannerAdSize.LARGE_BANNER,
         onAdLoaded: _onAdLoaded,
         onAdClicked: _onAdClicked,

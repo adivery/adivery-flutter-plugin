@@ -1,3 +1,8 @@
+#4.1.4
+* update to latest sdk version
+* support for 2 more ad networks
+* fix network request rate
+
 #4.1.0
 * update to latest Adivery SDK
 * add support to 3 more ad networks
