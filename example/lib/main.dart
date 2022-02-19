@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
     AdiveryPlugin.prepareInterstitialAd("de5db046-765d-478f-bb2e-30dc2eaf3f51");
     AdiveryPlugin.prepareRewardedAd("3f97dc4d-3e09-4024-acaf-931862c03ba8");
     AdiveryPlugin.addListener(
-        onError: (placementId, reason) => {},
+        onError: onError,
         onInterstitialLoaded: onInterstitialLoaded,
         onRewardedClosed: onRewardedClosed,
         onRewardedLoaded: (placement) => {});

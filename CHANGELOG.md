@@ -1,3 +1,10 @@
+#4.2.10
+* fix native ad method channels
+
+#4.2.9
+* fix native ad issues
+* update to lates sdk version
+
 #4.2.0
 * update to latest adivery sdk
 * improve video ads

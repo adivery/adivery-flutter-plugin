@@ -11,10 +11,11 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenCentral()
         google()
         jcenter()
         maven {
-            url 'https://dl.bintray.com/adivery/maven'
+            url 'http://download.flutter.io'
         }
     }
 }

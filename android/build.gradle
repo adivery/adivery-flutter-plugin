@@ -11,7 +11,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath 'com.android.tools.build:gradle:4.1.2'
     }
 }
 
@@ -35,6 +35,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.adivery:sdk:4.2.1'
+    implementation 'com.adivery:sdk:4.2.9'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.10'
 }

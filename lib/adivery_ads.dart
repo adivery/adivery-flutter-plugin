@@ -197,8 +197,8 @@ class NativeAd {
   String? advertiser;
   bool isLoaded = false;
 
-  void loadAd() {
-    _channel.invokeMethod("native", {"placement_id": placementId, "id": id});
+  void loadAd() async {
+    await _channel.invokeMethod("native", {"placement_id": placementId, "id": id});
     _handler = new NativeAdEventHandler(
       id,
       placementId,
