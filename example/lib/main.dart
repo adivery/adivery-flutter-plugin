@@ -22,10 +22,10 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initPlatformState() {
-    AdiveryPlugin.initialize("7e27fb38-5aff-473a-998f-437b89426f66");
+    AdiveryPlugin.initialize("59c36ce3-7125-40a7-bd34-144e6906c796");
     AdiveryPlugin.setLoggingEnabled(true);
-    AdiveryPlugin.prepareInterstitialAd("de5db046-765d-478f-bb2e-30dc2eaf3f51");
-    AdiveryPlugin.prepareRewardedAd("3f97dc4d-3e09-4024-acaf-931862c03ba8");
+    AdiveryPlugin.prepareInterstitialAd("915fc1d8-9bc1-47b8-96fb-751e7ebf540b");
+    AdiveryPlugin.prepareRewardedAd("59007992-f059-4aba-8229-94342e48cad7");
     AdiveryPlugin.addListener(
         onError: onError,
         onInterstitialLoaded: onInterstitialLoaded,
@@ -126,7 +126,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   _loadInterstitial() {
-    var placementId = "de5db046-765d-478f-bb2e-30dc2eaf3f51";
+    var placementId = "915fc1d8-9bc1-47b8-96fb-751e7ebf540b";
     AdiveryPlugin.isLoaded(placementId)
         .then((isLoaded) => showPlacement(isLoaded, placementId));
   }
@@ -211,7 +211,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _loadRewardedAd() {
-    var placementId = "3f97dc4d-3e09-4024-acaf-931862c03ba8";
+    var placementId = "59007992-f059-4aba-8229-94342e48cad7";
     AdiveryPlugin.isLoaded(placementId)
         .then((isLoaded) => showPlacement(isLoaded, placementId));
   }
