@@ -127,12 +127,12 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
     switch (call.method) {
       case "initialize":
         Adivery.configure(activity.getApplication(), (String) call.argument("appId"));
-        Adivery.addListener(listener);
+        Adivery.addGlobalListener(listener);
         isInitialized = true;
         break;
       case "setLoggingEnabled":
         Boolean isLoggingEnabled = call.argument("isLoggingEnabled");
-        Adivery.setLoggingEnabled(isLoggingEnabled == null ? false : isLoggingEnabled);
+        Adivery.setLoggingEnabled(isLoggingEnabled != null && isLoggingEnabled);
         break;
       case "interstitial":
         requestInterstitialAd((String) call.arguments);
