@@ -189,7 +189,9 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
   @Override
   public void onDetachedFromEngine(FlutterPluginBinding binding) {
     Log.d("AdiveryPlugin", "detached from engine");
-    channel.setMethodCallHandler(null);
+    if (channel != null) {
+      channel.setMethodCallHandler(null);
+    }
     messenger = null;
     if (isInitialized) {
       Adivery.removeListener(listener);
