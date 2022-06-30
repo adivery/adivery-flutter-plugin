@@ -89,21 +89,19 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
     };
 
     private static boolean isAppInBackground(Context context) {
-        boolean isBackground = true;
-
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> runningProcesses = activityManager.getRunningAppProcesses();
         for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
             if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                 for (String activeProcess : processInfo.pkgList) {
                     if (activeProcess.equals(context.getPackageName())) {
-                        isBackground = false;
+                        return false;
                     }
                 }
             }
         }
 
-        return isBackground;
+        return true;
     }
 
     @Override
