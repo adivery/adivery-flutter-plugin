@@ -12,7 +12,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static _MyAppState instance;
+  static late _MyAppState instance;
 
   @override
   void initState() {
@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
 
   int _reward = 0;
 
-  NativeAd nativeAd;
+  NativeAd? nativeAd;
 
   List<Widget> _widgetOptions = <Widget>[
     Row(
@@ -217,59 +217,67 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget _nativeAd() {
-    if (nativeAd != null && nativeAd.isLoaded) {
+    if (nativeAd != null && nativeAd!.isLoaded == true) {
       return Column(
         children: <Widget>[
           Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Flexible(
-                  flex: 2,
-                  child: Column(children: <Widget>[
+            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Flexible(
+                flex: 2,
+                child: Column(
+                  children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Flexible(
-                          flex: 1,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              nativeAd.recordClick();
-                            },
-                            child: Text(nativeAd.callToAction),
+                        if (nativeAd!.callToAction != null)
+                          Flexible(
+                            flex: 1,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                nativeAd!.recordClick();
+                              },
+                              child: Text(nativeAd!.callToAction!),
+                            ),
                           ),
-                        ),
-                        Flexible(
-                          flex: 2,
-                          child: Text(
-                            nativeAd.headline,
-                            style: TextStyle(
+                        if (nativeAd!.headline != null)
+                          Flexible(
+                            flex: 2,
+                            child: Text(
+                              nativeAd!.headline!,
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16),
-                            textAlign: TextAlign.end,
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.end,
+                            ),
                           ),
-                        )
                       ],
                     ),
-                    Text(
-                      nativeAd.description,
-                      textAlign: TextAlign.end,
-                    )
-                  ]),
+                    if (nativeAd!.description != null)
+                      Text(
+                        nativeAd!.description!,
+                        textAlign: TextAlign.end,
+                      ),
+                  ],
                 ),
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.loose,
-                  child: Column(
-                    children: <Widget>[
-                      nativeAd.icon,
-                      Text(nativeAd.advertiser)
-                    ],
-                  ),
+              ),
+              Flexible(
+                flex: 1,
+                fit: FlexFit.loose,
+                child: Column(
+                  children: <Widget>[
+                    if (nativeAd!.icon != null) nativeAd!.icon!,
+                    if (nativeAd!.advertiser != null)
+                      Text(nativeAd!.advertiser!),
+                  ],
                 ),
-              ]),
-          nativeAd.image,
+              ),
+            ],
+          ),
+          if (nativeAd!.image != null) nativeAd!.image!,
         ],
       );
     } else {
@@ -277,12 +285,13 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+
   void _loadNative() {
     nativeAd = new NativeAd(
       "25928bf1-d4f7-432c-aaf7-1780602796c3",
       onAdLoaded: _onNativeAdLoaded,
     );
-    nativeAd.loadAd();
+    nativeAd?.loadAd();
     // call nativeAd.destroy(); when Widget removed;
   }
 
@@ -290,8 +299,8 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
   }
 
-  void showPlacement(bool isLoaded, String placementId) {
-    if (isLoaded) {
+  void showPlacement(bool? isLoaded, String placementId) {
+    if (isLoaded == true) {
       AdiveryPlugin.show(placementId);
     }
   }
