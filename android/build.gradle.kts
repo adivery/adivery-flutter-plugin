@@ -26,6 +26,5 @@ android {
 }
 
 dependencies {
-    implementation("com.adivery:sdk:4.8.3")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.10")
+    implementation("com.adivery:sdk:4.8.4-beta4")
 }
