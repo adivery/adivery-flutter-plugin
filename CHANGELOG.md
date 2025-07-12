@@ -1,3 +1,7 @@
+#4.8.4-beta1
+* add mintegral mediation
+* fix some bugs and do improvements
+
 #4.2.10
 * fix native ad method channels
 
