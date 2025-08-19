@@ -1,4 +1,9 @@
-#4.8.4-beta1
+#4.8.5
+* fixed issue with opening Bazaar modal on the app page
+* fixed issue with SDK version not being sent to the server
+* removed support for Optimize
+
+#4.8.4
 * add mintegral mediation
 * fix some bugs and do improvements
 

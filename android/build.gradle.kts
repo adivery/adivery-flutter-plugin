@@ -26,5 +26,5 @@ android {
 }
 
 dependencies {
-    implementation("com.adivery:sdk:4.8.4-beta4")
+    implementation("com.adivery:sdk:4.8.5")
 }
