@@ -26,15 +26,21 @@ class _MyAppState extends State<MyApp> {
     AdiveryPlugin.setLoggingEnabled(true);
     AdiveryPlugin.prepareInterstitialAd("de5db046-765d-478f-bb2e-30dc2eaf3f51");
     AdiveryPlugin.prepareRewardedAd("3f97dc4d-3e09-4024-acaf-931862c03ba8");
+    AdiveryPlugin.prepareAppOpenAd("c0b3bf0e-75a5-4183-ad86-2cc5c07c07d6");
     AdiveryPlugin.addListener(
         onError: onError,
         onInterstitialLoaded: onInterstitialLoaded,
+        onAppOpenAdLoaded: onAppOpenLoaded,
         onRewardedClosed: onRewardedClosed,
         onRewardedLoaded: (placement) => {});
   }
 
   static void onInterstitialLoaded(String placement) {
     print("interstitial loaded");
+  }
+
+  static void onAppOpenLoaded(String placement) {
+    print("AppOpen loaded");
   }
 
   static void onRewardedClosed(String placement, bool isRewarded) {
@@ -131,6 +137,12 @@ class _MyAppState extends State<MyApp> {
         .then((isLoaded) => showPlacement(isLoaded, placementId));
   }
 
+  _loadAppOpen() {
+    var placementId = "c0b3bf0e-75a5-4183-ad86-2cc5c07c07d6";
+    AdiveryPlugin.isLoaded(placementId)
+        .then((isLoaded) => showAppOpenPlacement(isLoaded, placementId));
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -189,6 +201,10 @@ class _MyAppState extends State<MyApp> {
                             child: ElevatedButton(
                                 onPressed: _loadInterstitial,
                                 child: Text("InterstitialAd"))),
+                        Flexible(
+                            child: ElevatedButton(
+                                onPressed: _loadAppOpen,
+                                child: Text("OpenAppAds"))),
                         Flexible(
                           child: ElevatedButton(
                             onPressed: _loadRewardedAd,
@@ -285,7 +301,6 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-
   void _loadNative() {
     nativeAd = new NativeAd(
       "25928bf1-d4f7-432c-aaf7-1780602796c3",
@@ -302,6 +317,12 @@ class _MyAppState extends State<MyApp> {
   void showPlacement(bool? isLoaded, String placementId) {
     if (isLoaded == true) {
       AdiveryPlugin.show(placementId);
+    }
+  }
+
+  void showAppOpenPlacement(bool? isLoaded, String placementId) {
+    if (isLoaded == true) {
+      AdiveryPlugin.showAppOpenPlacement(placementId);
     }
   }
 }

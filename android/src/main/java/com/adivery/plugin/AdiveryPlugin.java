@@ -80,6 +80,26 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
         }
 
         @Override
+        public void onAppOpenAdLoaded(String placementId) {
+            channel.invokeMethod("onAppOpenAdLoaded", placementId);
+        }
+
+        @Override
+        public void onAppOpenAdShown(String placementId) {
+            channel.invokeMethod("onAppOpenAdShown", placementId);
+        }
+
+        @Override
+        public void onAppOpenAdClosed(String placementId) {
+            channel.invokeMethod("onAppOpenAdClosed", placementId);
+        }
+
+        @Override
+        public void onAppOpenAdClicked(String placementId) {
+            channel.invokeMethod("onAppOpenAdClicked", placementId);
+        }
+
+        @Override
         public void log(String placementId, String reason) {
             Map<String, String> arguments = new HashMap<>();
             arguments.put("placement_id", placementId);
@@ -136,6 +156,9 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
             case "interstitial":
                 requestInterstitialAd((String) call.arguments);
                 break;
+            case "appOpen":
+                requestAppOpenAd((String) call.arguments);
+                break;
             case "rewarded":
                 requestRewardedAd((String) call.arguments);
                 break;
@@ -147,6 +170,9 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
                 return;
             case "show":
                 Adivery.showAd((String) call.arguments);
+                break;
+            case "showAppOpen":
+                Adivery.showAppOpenAd(activity, (String) call.arguments);
                 break;
             case "destroyAd":
                 destroyAd((String) call.arguments);
@@ -183,6 +209,10 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
 
     private void requestInterstitialAd(String placementId) {
         Adivery.prepareInterstitialAd(activity, placementId);
+    }
+
+    private void requestAppOpenAd(String placementId) {
+        Adivery.prepareAppOpenAd(activity, placementId);
     }
 
     @Override
