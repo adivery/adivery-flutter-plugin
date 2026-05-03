@@ -42,3 +42,7 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    implementation("com.mbridge.msdk.oversea:mbridge_android_sdk:16.9.71")
+}

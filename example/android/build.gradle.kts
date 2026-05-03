@@ -15,6 +15,7 @@ allprojects {
         google()
         jcenter()
         maven(url ="https://storage.googleapis.com/download.flutter.io")
+        maven(url = "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea")
     }
 }
 

@@ -4,10 +4,11 @@ packages:
   adivery:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
-    version: "4.3.0"
+      name: adivery
+      sha256: "32e1b0781c103d5c8305f857934d72f0d25b0afe494bea5f1cc650e10bdc56c6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.8.5"
   async:
     dependency: transitive
     description:
