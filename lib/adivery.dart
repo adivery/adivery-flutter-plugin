@@ -10,6 +10,10 @@ class AdiveryPlugin {
   static EmptyFunction? _onInterstitialClicked;
   static EmptyFunction? _onInterstitialShown;
   static EmptyFunction? _onInterstitialClosed;
+  static EmptyFunction? _onAppOpenAdLoaded;
+  static EmptyFunction? _onAppOpenAdShown;
+  static EmptyFunction? _onAppOpenAdClosed;
+  static EmptyFunction? _onAppOpenAdClicked;
   static EmptyFunction? _onRewardedLoaded;
   static EmptyFunction? _onRewardedClicked;
   static EmptyFunction? _onRewardedShown;
@@ -24,6 +28,10 @@ class AdiveryPlugin {
       EmptyFunction? onRewardedLoaded,
       EmptyFunction? onRewardedClicked,
       EmptyFunction? onRewardedShown,
+      EmptyFunction? onAppOpenAdLoaded,
+      EmptyFunction? onAppOpenAdShown,
+      EmptyFunction? onAppOpenAdClosed,
+      EmptyFunction? onAppOpenAdClicked,
       RewardFunction? onRewardedClosed,
       ErrorFunction? onError}) {
     _onError = onError;
@@ -35,6 +43,10 @@ class AdiveryPlugin {
     _onRewardedClosed = onRewardedClosed;
     _onRewardedLoaded = onRewardedLoaded;
     _onRewardedShown = onRewardedShown;
+    _onAppOpenAdLoaded = onAppOpenAdLoaded;
+    _onAppOpenAdShown = onAppOpenAdShown;
+    _onAppOpenAdClosed = onAppOpenAdClosed;
+    _onAppOpenAdClicked = onAppOpenAdClicked;
   }
 
   static void initialize(
@@ -58,12 +70,20 @@ class AdiveryPlugin {
     await _channel.invokeMethod("rewarded", placementId);
   }
 
+  static void prepareAppOpenAd(String placementId) async {
+    await _channel.invokeMethod("appOpen", placementId);
+  }
+
   static Future<bool?> isLoaded(String placementId) async {
     return _channel.invokeMethod("isLoaded", placementId);
   }
 
   static void show(String placement) async {
     _channel.invokeMethod("show", placement);
+  }
+
+  static void showAppOpenPlacement(String placement) async {
+    _channel.invokeMethod("showAppOpen", placement);
   }
 
   static _handleMethodCall(MethodCall call) {
@@ -91,6 +111,18 @@ class AdiveryPlugin {
         break;
       case "onInterstitialAdClosed":
         _onInterstitialClosed?.call(call.arguments as String);
+        break;
+      case "onAppOpenAdLoaded":
+        _onAppOpenAdLoaded?.call(call.arguments as String);
+        break;
+      case "onAppOpenAdShown":
+        _onAppOpenAdShown?.call(call.arguments as String);
+        break;
+      case "onAppOpenAdClosed":
+        _onAppOpenAdClosed?.call(call.arguments as String);
+        break;
+      case "onAppOpenAdClicked":
+        _onAppOpenAdClicked?.call(call.arguments as String);
         break;
       case "onInterstitialAdClicked":
         _onInterstitialClicked?.call(call.arguments as String);

@@ -1,3 +1,6 @@
+#4.8.6
+* add App Open ads
+
 #4.8.5
 * fixed issue with opening Bazaar modal on the app page
 * fixed issue with SDK version not being sent to the server
