@@ -1,3 +1,9 @@
+#4.8.7
+* Fixed bug in starting intents .
+* Improved build configuration by adding new ProGuard settings.
+* Fixed some bugs related to publishers.
+* Added SDK version to ad-analytics to analyze data by SDK version.
+
 #4.8.6
 * add App Open ads
 
