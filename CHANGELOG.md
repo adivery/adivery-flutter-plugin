@@ -1,3 +1,6 @@
+#4.8.8
+* fixed issue with opening Bazaar app on the AppOpen ads
+
 #4.8.7
 * Fixed bug in starting intents .
 * Improved build configuration by adding new ProGuard settings.
