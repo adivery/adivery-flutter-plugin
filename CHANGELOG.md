@@ -1,3 +1,6 @@
+#4.9.0
+* Added support for showing two sequential rewarded ads.
+
 #4.8.8
 * fixed issue with opening Bazaar app on the AppOpen ads
 
