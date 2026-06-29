@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import androidx.annotation.Nullable;
+
 import com.adivery.sdk.Adivery;
 import com.adivery.sdk.AdiveryNativeCallback;
 import com.adivery.sdk.networks.adivery.AdiveryNativeAd;
@@ -82,6 +84,7 @@ public class NativeAd extends BaseAd implements MethodChannel.MethodCallHandler 
                 break;
             default:
                 result.notImplemented();
+                return;
         }
         result.success(true);
     }
@@ -89,10 +92,11 @@ public class NativeAd extends BaseAd implements MethodChannel.MethodCallHandler 
     private void loadAd() {
         Adivery.requestNativeAd(activity, placementId, callback);
     }
-    
+
     private byte[] readDrawable(Drawable drawable) {
-        BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-        Bitmap bitmap = bitmapDrawable.getBitmap();
+        if (!(drawable instanceof BitmapDrawable)) return null;
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        if (bitmap == null) return null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
         return bos.toByteArray();

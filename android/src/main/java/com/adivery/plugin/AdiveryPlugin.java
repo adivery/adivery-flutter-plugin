@@ -179,6 +179,7 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
                 break;
             default:
                 result.notImplemented();
+                return;
         }
         result.success(true);
     }
