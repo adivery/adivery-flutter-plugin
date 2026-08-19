@@ -80,6 +80,35 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
         }
 
         @Override
+        public void onOfferWallAdLoaded(String placementId) {
+            channel.invokeMethod("onOfferWallAdLoaded", placementId);
+        }
+
+        @Override
+        public void onOfferWallAdShown(String placementId) {
+            channel.invokeMethod("onOfferWallAdShown", placementId);
+        }
+
+        @Override
+        public void onOfferWallAdClicked(String placementId) {
+            channel.invokeMethod("onOfferWallAdClicked", placementId);
+        }
+
+        @Override
+        public void onOfferWallAdClosed(String placementId) {
+            channel.invokeMethod("onOfferWallAdClosed", placementId);
+        }
+
+        @Override
+        public void onOfferWallMissionRewarded(String placementId, String currency, int rewardAmount) {
+            Map<String, Object> arguments = new HashMap<>();
+            arguments.put("placement_id", placementId);
+            arguments.put("currency", currency);
+            arguments.put("reward_amount", rewardAmount);
+            channel.invokeMethod("onOfferWallMissionRewarded", arguments);
+        }
+
+        @Override
         public void onAppOpenAdLoaded(String placementId) {
             channel.invokeMethod("onAppOpenAdLoaded", placementId);
         }
@@ -162,6 +191,9 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
             case "rewarded":
                 requestRewardedAd((String) call.arguments);
                 break;
+            case "offerWall":
+                requestOfferWallAd((String) call.arguments);
+                break;
             case "native":
                 requestNativeAd((String)call.argument("placement_id"), (String)call.argument("id"));
                 break;
@@ -206,6 +238,10 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
 
     private void requestRewardedAd(String placementId) {
         Adivery.prepareRewardedAd(activity, placementId);
+    }
+
+    private void requestOfferWallAd(String placementId) {
+        Adivery.prepareOfferWallAd(activity, placementId);
     }
 
     private void requestInterstitialAd(String placementId) {

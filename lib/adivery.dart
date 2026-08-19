@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 typedef EmptyFunction = void Function(String placement);
 typedef ErrorFunction = void Function(String placement, String reason);
 typedef RewardFunction = void Function(String placement, bool isRewarded);
+typedef OfferWallRewardFunction = void Function(
+    String placement, String currency, int rewardAmount);
 
 class AdiveryPlugin {
   static const MethodChannel _channel = const MethodChannel('adivery_plugin');
@@ -18,6 +20,11 @@ class AdiveryPlugin {
   static EmptyFunction? _onRewardedClicked;
   static EmptyFunction? _onRewardedShown;
   static RewardFunction? _onRewardedClosed;
+  static EmptyFunction? _onOfferWallLoaded;
+  static EmptyFunction? _onOfferWallShown;
+  static EmptyFunction? _onOfferWallClicked;
+  static EmptyFunction? _onOfferWallClosed;
+  static OfferWallRewardFunction? _onOfferWallMissionRewarded;
   static ErrorFunction? _onError;
 
   static void addListener(
@@ -33,6 +40,11 @@ class AdiveryPlugin {
       EmptyFunction? onAppOpenAdClosed,
       EmptyFunction? onAppOpenAdClicked,
       RewardFunction? onRewardedClosed,
+      EmptyFunction? onOfferWallLoaded,
+      EmptyFunction? onOfferWallShown,
+      EmptyFunction? onOfferWallClicked,
+      EmptyFunction? onOfferWallClosed,
+      OfferWallRewardFunction? onOfferWallMissionRewarded,
       ErrorFunction? onError}) {
     _onError = onError;
     _onInterstitialClicked = onInterstitialClicked;
@@ -47,6 +59,11 @@ class AdiveryPlugin {
     _onAppOpenAdShown = onAppOpenAdShown;
     _onAppOpenAdClosed = onAppOpenAdClosed;
     _onAppOpenAdClicked = onAppOpenAdClicked;
+    _onOfferWallLoaded = onOfferWallLoaded;
+    _onOfferWallShown = onOfferWallShown;
+    _onOfferWallClicked = onOfferWallClicked;
+    _onOfferWallClosed = onOfferWallClosed;
+    _onOfferWallMissionRewarded = onOfferWallMissionRewarded;
   }
 
   static void initialize(
@@ -72,6 +89,10 @@ class AdiveryPlugin {
 
   static void prepareAppOpenAd(String placementId) async {
     await _channel.invokeMethod("appOpen", placementId);
+  }
+
+  static void prepareOfferWallAd(String placementId) async {
+    await _channel.invokeMethod("offerWall", placementId);
   }
 
   static Future<bool?> isLoaded(String placementId) async {
@@ -126,6 +147,25 @@ class AdiveryPlugin {
         break;
       case "onInterstitialAdClicked":
         _onInterstitialClicked?.call(call.arguments as String);
+        break;
+      case "onOfferWallAdLoaded":
+        _onOfferWallLoaded?.call(call.arguments as String);
+        break;
+      case "onOfferWallAdShown":
+        _onOfferWallShown?.call(call.arguments as String);
+        break;
+      case "onOfferWallAdClicked":
+        _onOfferWallClicked?.call(call.arguments as String);
+        break;
+      case "onOfferWallAdClosed":
+        _onOfferWallClosed?.call(call.arguments as String);
+        break;
+      case "onOfferWallMissionRewarded":
+        var args = call.arguments as Map<dynamic, dynamic>;
+        var placement = args["placement_id"] as String;
+        var currency = args["currency"] as String;
+        var rewardAmount = args["reward_amount"] as int;
+        _onOfferWallMissionRewarded?.call(placement, currency, rewardAmount);
         break;
       case "onError":
         var args = call.arguments as Map<dynamic, dynamic>;

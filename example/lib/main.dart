@@ -27,12 +27,16 @@ class _MyAppState extends State<MyApp> {
     AdiveryPlugin.prepareInterstitialAd("de5db046-765d-478f-bb2e-30dc2eaf3f51");
     AdiveryPlugin.prepareRewardedAd("3f97dc4d-3e09-4024-acaf-931862c03ba8");
     AdiveryPlugin.prepareAppOpenAd("c0b3bf0e-75a5-4183-ad86-2cc5c07c07d6");
+    // TODO: replace with an OfferWall placement id created for this sample's app id.
+    AdiveryPlugin.prepareOfferWallAd("c11a9d90-043a-4a44-a6a8-f35e414bf675");
     AdiveryPlugin.addListener(
         onError: onError,
         onInterstitialLoaded: onInterstitialLoaded,
         onAppOpenAdLoaded: onAppOpenLoaded,
         onRewardedClosed: onRewardedClosed,
-        onRewardedLoaded: (placement) => {});
+        onRewardedLoaded: (placement) => {},
+        onOfferWallLoaded: onOfferWallLoaded,
+        onOfferWallMissionRewarded: onOfferWallMissionRewarded);
   }
 
   static void onInterstitialLoaded(String placement) {
@@ -54,6 +58,18 @@ class _MyAppState extends State<MyApp> {
 
   static void onError(String placement, String error) {
     print("onError" + error);
+  }
+
+  static void onOfferWallLoaded(String placement) {
+    print("OfferWall loaded");
+  }
+
+  static void onOfferWallMissionRewarded(
+      String placement, String currency, int rewardAmount) {
+    print("OfferWall mission rewarded: $rewardAmount $currency");
+    instance.setState(() {
+      instance._reward += rewardAmount;
+    });
   }
 
   static void _onAdLoaded(Ad ad) {
@@ -216,6 +232,12 @@ class _MyAppState extends State<MyApp> {
                             onPressed: _loadNative,
                             child: Text("NativeAd"),
                           ),
+                        ),
+                        Flexible(
+                          child: ElevatedButton(
+                            onPressed: _loadOfferWallAd,
+                            child: Text("OfferWallAd"),
+                          ),
                         )
                       ],
                     ),
@@ -228,6 +250,13 @@ class _MyAppState extends State<MyApp> {
 
   void _loadRewardedAd() {
     var placementId = "3f97dc4d-3e09-4024-acaf-931862c03ba8";
+    AdiveryPlugin.isLoaded(placementId)
+        .then((isLoaded) => showPlacement(isLoaded, placementId));
+  }
+
+  void _loadOfferWallAd() {
+    // TODO: replace with an OfferWall placement id created for this sample's app id.
+    var placementId = "c11a9d90-043a-4a44-a6a8-f35e414bf675";
     AdiveryPlugin.isLoaded(placementId)
         .then((isLoaded) => showPlacement(isLoaded, placementId));
   }
