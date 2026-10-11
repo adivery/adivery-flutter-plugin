@@ -182,6 +182,9 @@ public class AdiveryPlugin implements FlutterPlugin, MethodCallHandler, Activity
                 Boolean isLoggingEnabled = call.argument("isLoggingEnabled");
                 Adivery.setLoggingEnabled(isLoggingEnabled != null && isLoggingEnabled);
                 break;
+            case "setUserId":
+                Adivery.setUserId((String) call.argument("userId"));
+                break;
             case "interstitial":
                 requestInterstitialAd((String) call.arguments);
                 break;

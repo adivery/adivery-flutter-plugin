@@ -79,6 +79,10 @@ class AdiveryPlugin {
         "setLoggingEnabled", {"isLoggingEnabled": isLoggingEnabled});
   }
 
+  static void setUserId(String userId) async {
+    await _channel.invokeMethod("setUserId", {"userId": userId});
+  }
+
   static void prepareInterstitialAd(String placementId) async {
     await _channel.invokeMethod("interstitial", placementId);
   }

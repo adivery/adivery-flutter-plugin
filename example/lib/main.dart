@@ -27,6 +27,7 @@ class _MyAppState extends State<MyApp> {
   void initPlatformState() {
     AdiveryPlugin.initialize("7e27fb38-5aff-473a-998f-437b89426f66");
     AdiveryPlugin.setLoggingEnabled(true);
+    AdiveryPlugin.setUserId("test-user");
     AdiveryPlugin.addListener(
         onError: onError,
         onInterstitialLoaded: onInterstitialLoaded,
