@@ -2,7 +2,7 @@
 * Updated the Adivery Android SDK to 4.10.0-alpha.1 (pre-release: apps on `adivery: ^4.9.0` must opt in explicitly).
 * Added the OfferWall ad format: `AdiveryPlugin.prepareOfferWallAd(placementId)`, shown with the existing `AdiveryPlugin.isLoaded()` / `AdiveryPlugin.show()`.
 * Added the `onOfferWallLoaded`, `onOfferWallShown`, `onOfferWallClicked`, `onOfferWallClosed` and `onOfferWallMissionRewarded(placement, currency, rewardAmount)` listener parameters to `AdiveryPlugin.addListener()`.
-* An OfferWall is not prefetched again after it closes: call `prepareOfferWallAd()` again (for example from `onOfferWallClosed`) before showing it next time.
+* An OfferWall is not prefetched again after it closes: call `prepareOfferWallAd()` again before showing it next time.
 * Fixed native ad load/show failures never reaching the `NativeAd` `onError` callback.
 * Fixed `NativeAd.destroy()` throwing an error.
 

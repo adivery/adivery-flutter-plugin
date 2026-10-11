@@ -12,6 +12,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  static const String offerWallPlacementId =
+      "9cad440a-8271-49d2-8f81-0819268a5ce4";
+
   static late _MyAppState instance;
 
   @override
@@ -24,11 +27,6 @@ class _MyAppState extends State<MyApp> {
   void initPlatformState() {
     AdiveryPlugin.initialize("7e27fb38-5aff-473a-998f-437b89426f66");
     AdiveryPlugin.setLoggingEnabled(true);
-    AdiveryPlugin.prepareInterstitialAd("de5db046-765d-478f-bb2e-30dc2eaf3f51");
-    AdiveryPlugin.prepareRewardedAd("3f97dc4d-3e09-4024-acaf-931862c03ba8");
-    AdiveryPlugin.prepareAppOpenAd("c0b3bf0e-75a5-4183-ad86-2cc5c07c07d6");
-    // TODO: replace with an OfferWall placement id created for this sample's app id.
-    AdiveryPlugin.prepareOfferWallAd("c11a9d90-043a-4a44-a6a8-f35e414bf675");
     AdiveryPlugin.addListener(
         onError: onError,
         onInterstitialLoaded: onInterstitialLoaded,
@@ -36,7 +34,13 @@ class _MyAppState extends State<MyApp> {
         onRewardedClosed: onRewardedClosed,
         onRewardedLoaded: (placement) => {},
         onOfferWallLoaded: onOfferWallLoaded,
+        onOfferWallShown: onOfferWallShown,
+        onOfferWallClicked: onOfferWallClicked,
+        onOfferWallClosed: onOfferWallClosed,
         onOfferWallMissionRewarded: onOfferWallMissionRewarded);
+    AdiveryPlugin.prepareInterstitialAd("de5db046-765d-478f-bb2e-30dc2eaf3f51");
+    AdiveryPlugin.prepareRewardedAd("3f97dc4d-3e09-4024-acaf-931862c03ba8");
+    AdiveryPlugin.prepareAppOpenAd("c0b3bf0e-75a5-4183-ad86-2cc5c07c07d6");
   }
 
   static void onInterstitialLoaded(String placement) {
@@ -58,10 +62,32 @@ class _MyAppState extends State<MyApp> {
 
   static void onError(String placement, String error) {
     print("onError" + error);
+    if (placement == offerWallPlacementId) {
+      instance.setState(() {
+        instance._offerWallLoading = false;
+      });
+    }
   }
 
   static void onOfferWallLoaded(String placement) {
     print("OfferWall loaded");
+    // The OfferWall is only prepared from its button, so show it right away.
+    instance.setState(() {
+      instance._offerWallLoading = false;
+    });
+    AdiveryPlugin.show(placement);
+  }
+
+  static void onOfferWallShown(String placement) {
+    print("OfferWall shown");
+  }
+
+  static void onOfferWallClicked(String placement) {
+    print("OfferWall clicked");
+  }
+
+  static void onOfferWallClosed(String placement) {
+    print("OfferWall closed");
   }
 
   static void onOfferWallMissionRewarded(
@@ -87,6 +113,8 @@ class _MyAppState extends State<MyApp> {
   static int _index = 0;
 
   int _reward = 0;
+
+  bool _offerWallLoading = false;
 
   NativeAd? nativeAd;
 
@@ -166,86 +194,82 @@ class _MyAppState extends State<MyApp> {
             appBar: AppBar(
               title: const Text('Adivery example app'),
             ),
-            body: Center(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    Center(
-                      child: Text("Your reward is: $_reward"),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Flexible(
-                          flex: 1,
-                          fit: FlexFit.tight,
-                          child: ElevatedButton(
-                            child: Text("Banner"),
-                            onPressed: () {
-                              _onChanged(0);
-                            },
-                          ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: ElevatedButton(
-                            child: Text("Large Banner"),
-                            onPressed: () {
-                              _onChanged(1);
-                            },
-                          ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: ElevatedButton(
-                            child: Text("Medium Rectangle"),
-                            onPressed: () {
-                              _onChanged(2);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[_getBanner()],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Flexible(
-                            child: ElevatedButton(
-                                onPressed: _loadInterstitial,
-                                child: Text("InterstitialAd"))),
-                        Flexible(
-                            child: ElevatedButton(
-                                onPressed: _loadAppOpen,
-                                child: Text("OpenAppAds"))),
-                        Flexible(
-                          child: ElevatedButton(
-                            onPressed: _loadRewardedAd,
-                            child: Text("RewardedAd"),
-                          ),
-                        ),
-                        Flexible(
-                          child: ElevatedButton(
-                            onPressed: _loadNative,
-                            child: Text("NativeAd"),
-                          ),
-                        ),
-                        Flexible(
-                          child: ElevatedButton(
-                            onPressed: _loadOfferWallAd,
-                            child: Text("OfferWallAd"),
-                          ),
-                        )
-                      ],
-                    ),
-                    _nativeAd()
-                  ],
-                ),
+            body: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text("Your reward is: $_reward"),
+                  ),
+                  // Fullscreen formats.
+                  _buttonRow(<Widget>[
+                    ElevatedButton(
+                        onPressed: _loadInterstitial,
+                        child: Text("InterstitialAd")),
+                    ElevatedButton(
+                        onPressed: _loadRewardedAd, child: Text("RewardedAd")),
+                  ]),
+                  _buttonRow(<Widget>[
+                    ElevatedButton(
+                        onPressed: _loadAppOpen, child: Text("OpenAppAds")),
+                    ElevatedButton(
+                        onPressed: _offerWallLoading ? null : _loadOfferWallAd,
+                        child: Text("OfferWallAd")),
+                  ]),
+                  const Divider(),
+                  // Banner sizes, right above the banner they switch.
+                  Wrap(
+                    spacing: 8,
+                    alignment: WrapAlignment.center,
+                    children: <Widget>[
+                      ElevatedButton(
+                        child: Text("Banner"),
+                        onPressed: () {
+                          _onChanged(0);
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text("Large Banner"),
+                        onPressed: () {
+                          _onChanged(1);
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text("Medium Rectangle"),
+                        onPressed: () {
+                          _onChanged(2);
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[_getBanner()],
+                  ),
+                  const Divider(),
+                  // Native ad, right above where it renders.
+                  _buttonRow(<Widget>[
+                    ElevatedButton(
+                        onPressed: _loadNative, child: Text("NativeAd")),
+                  ]),
+                  _nativeAd()
+                ],
               ),
             )));
+  }
+
+  Widget _buttonRow(List<Widget> buttons) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Row(
+        children: <Widget>[
+          for (var i = 0; i < buttons.length; i++) ...[
+            if (i > 0) const SizedBox(width: 8),
+            Expanded(child: buttons[i]),
+          ],
+        ],
+      ),
+    );
   }
 
   void _loadRewardedAd() {
@@ -255,10 +279,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _loadOfferWallAd() {
-    // TODO: replace with an OfferWall placement id created for this sample's app id.
-    var placementId = "c11a9d90-043a-4a44-a6a8-f35e414bf675";
-    AdiveryPlugin.isLoaded(placementId)
-        .then((isLoaded) => showPlacement(isLoaded, placementId));
+    // The OfferWall is only loaded on request (the SDK doesn't prefetch another
+    // one after it closes); the button stays disabled until it loads or fails.
+    setState(() {
+      _offerWallLoading = true;
+    });
+    AdiveryPlugin.prepareOfferWallAd(offerWallPlacementId);
   }
 
   Widget _nativeAd() {
