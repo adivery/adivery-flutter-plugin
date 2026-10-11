@@ -1,3 +1,7 @@
+#4.10.0-alpha.2
+* Added `AdiveryPlugin.setUserId(userId)`, which passes your app's user ID to the Adivery SDK.
+* Still uses the Adivery Android SDK 4.10.0-alpha.1 (no new SDK release; this version only adds `setUserId`).
+
 #4.10.0-alpha.1
 * Updated the Adivery Android SDK to 4.10.0-alpha.1 (pre-release: apps on `adivery: ^4.9.0` must opt in explicitly).
 * Added the OfferWall ad format: `AdiveryPlugin.prepareOfferWallAd(placementId)`, shown with the existing `AdiveryPlugin.isLoaded()` / `AdiveryPlugin.show()`.
