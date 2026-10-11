@@ -27,12 +27,12 @@ public class NativeAd extends BaseAd implements MethodChannel.MethodCallHandler 
     private final AdiveryNativeCallback callback = new AdiveryNativeCallback() {
         @Override
         public void onAdShowFailed(String reason) {
-            channel.invokeMethod("onError", reason);
+            channel.invokeMethod("onAdShowFailed", reason);
         }
 
         @Override
         public void onAdLoadFailed(String reason) {
-            channel.invokeMethod("onError", reason);
+            channel.invokeMethod("onAdLoadFailed", reason);
         }
 
         @Override
@@ -43,6 +43,11 @@ public class NativeAd extends BaseAd implements MethodChannel.MethodCallHandler 
         @Override
         public void onAdShown() {
             channel.invokeMethod("onAdShown", null);
+        }
+
+        @Override
+        public void onAdClosed(boolean isRewarded) {
+            channel.invokeMethod("onAdClosed", null);
         }
 
         @Override

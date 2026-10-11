@@ -231,7 +231,7 @@ class NativeAd {
   }
 
   void destroy() {
-    _channel.invokeListMethod("destroyAd", id);
+    _channel.invokeMethod("destroyAd", id);
   }
 }
 
