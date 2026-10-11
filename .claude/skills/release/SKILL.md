@@ -60,8 +60,9 @@ echo "Releasing adivery $VERSION"
 NOTES=$(awk -v v="$VERSION" 'BEGIN{gsub(/\./,"\\.",v)} $0 ~ "^#+ *v?" v "([^0-9.]|$)"{f=1;next} /^#/{if(f)exit} f' CHANGELOG.md)
 [ -z "$NOTES" ] && echo "STOP: no CHANGELOG.md entry for $VERSION" || echo "$NOTES"
 
-# 3. Surface the Adivery Android SDK dependency — it is INDEPENDENT of the
-#    plugin version; just confirm with the user it is intended (do not edit).
+# 3. Surface the Adivery Android SDK dependency — since 4.8.7 it normally
+#    equals the plugin version (the new-plugin-version skill bumps both);
+#    confirm with the user if it differs (do not edit).
 grep -n 'com.adivery:sdk:' android/build.gradle.kts
 
 # 4. Make sure this release does not already exist, and we're on master
