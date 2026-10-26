@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initPlatformState() {
-    AdiveryPlugin.initialize("7e27fb38-5aff-473a-998f-437b89426f66");
+    AdiveryPlugin.initialize("738c5e66-2e4f-4ff0-8118-ef6c8235a5e9");
     AdiveryPlugin.setLoggingEnabled(true);
     AdiveryPlugin.setUserId("test-user");
     AdiveryPlugin.addListener(
@@ -39,8 +39,8 @@ class _MyAppState extends State<MyApp> {
         onOfferWallClicked: onOfferWallClicked,
         onOfferWallClosed: onOfferWallClosed,
         onOfferWallMissionRewarded: onOfferWallMissionRewarded);
-    AdiveryPlugin.prepareInterstitialAd("de5db046-765d-478f-bb2e-30dc2eaf3f51");
-    AdiveryPlugin.prepareRewardedAd("3f97dc4d-3e09-4024-acaf-931862c03ba8");
+    AdiveryPlugin.prepareInterstitialAd("5788d25b-b7d6-442c-a562-b4bef582c18c");
+    AdiveryPlugin.prepareRewardedAd("29f509a9-3826-4ada-8404-4735aa14b510");
     AdiveryPlugin.prepareAppOpenAd("c0b3bf0e-75a5-4183-ad86-2cc5c07c07d6");
   }
 
@@ -123,7 +123,7 @@ class _MyAppState extends State<MyApp> {
     Row(
       children: <Widget>[
         BannerAd(
-          "2f71ec44-f30a-4043-9cc1-f32347a07f8b",
+          "06f0c520-3cc8-45c0-bbf1-f866f7eac525",
           BannerAdSize.BANNER,
           onAdLoaded: _onAdLoaded,
           onAdClicked: _onAdClicked,
@@ -133,7 +133,7 @@ class _MyAppState extends State<MyApp> {
     Row(
       children: <Widget>[
         BannerAd(
-          "2f71ec44-f30a-4043-9cc1-f32347a07f8b",
+          "06f0c520-3cc8-45c0-bbf1-f866f7eac525",
           BannerAdSize.LARGE_BANNER,
           onAdLoaded: _onAdLoaded,
           onAdClicked: _onAdClicked,
@@ -144,7 +144,7 @@ class _MyAppState extends State<MyApp> {
     Row(
       children: <Widget>[
         BannerAd(
-          "2f71ec44-f30a-4043-9cc1-f32347a07f8b",
+          "06f0c520-3cc8-45c0-bbf1-f866f7eac525",
           BannerAdSize.MEDIUM_RECTANGLE,
           onAdLoaded: _onAdLoaded,
           onAdClicked: _onAdClicked,
@@ -165,7 +165,7 @@ class _MyAppState extends State<MyApp> {
       return _widgetOptions.elementAt(0);
     } else if (_index == 1) {
       return BannerAd(
-        "2f71ec44-f30a-4043-9cc1-f32347a07f8b",
+        "06f0c520-3cc8-45c0-bbf1-f866f7eac525",
         BannerAdSize.LARGE_BANNER,
         onAdLoaded: _onAdLoaded,
         onAdClicked: _onAdClicked,
@@ -177,7 +177,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   _loadInterstitial() {
-    var placementId = "de5db046-765d-478f-bb2e-30dc2eaf3f51";
+    var placementId = "5788d25b-b7d6-442c-a562-b4bef582c18c";
     AdiveryPlugin.isLoaded(placementId)
         .then((isLoaded) => showPlacement(isLoaded, placementId));
   }
@@ -274,7 +274,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _loadRewardedAd() {
-    var placementId = "3f97dc4d-3e09-4024-acaf-931862c03ba8";
+    var placementId = "29f509a9-3826-4ada-8404-4735aa14b510";
     AdiveryPlugin.isLoaded(placementId)
         .then((isLoaded) => showPlacement(isLoaded, placementId));
   }
@@ -359,7 +359,7 @@ class _MyAppState extends State<MyApp> {
 
   void _loadNative() {
     nativeAd = new NativeAd(
-      "25928bf1-d4f7-432c-aaf7-1780602796c3",
+      "9bc87b9f-3aef-4988-b1d2-2f4e5b67b2c5",
       onAdLoaded: _onNativeAdLoaded,
     );
     nativeAd?.loadAd();
