@@ -1,3 +1,9 @@
+#4.10.0-alpha.3
+* Updated the Adivery Android SDK to 4.10.0-alpha.3 (pre-release: apps on `adivery: ^4.9.0` must opt in explicitly).
+* Native ads now finish downloading their icon and image before `onAdLoaded` is called, so they no longer load without them. If a download fails or takes more than 10 seconds, the ad is still delivered, without that image.
+* SDK initialization now falls back through several Adivery hosts when the first one can't be reached.
+* Fixes for several SDK crashes reported in production.
+
 #4.10.0-alpha.2
 * Added `AdiveryPlugin.setUserId(userId)`, which passes your app's user ID to the Adivery SDK.
 * Still uses the Adivery Android SDK 4.10.0-alpha.1 (no new SDK release; this version only adds `setUserId`).
