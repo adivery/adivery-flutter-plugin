@@ -1,3 +1,8 @@
+#4.10.0
+* Updated the Adivery Android SDK to 4.10.0, the stable release of the 4.10.0 line. Apps on `adivery: ^4.9.0` now pick it up.
+* Includes everything from 4.10.0-alpha.1 to 4.10.0-alpha.3: the OfferWall format, `AdiveryPlugin.setUserId()`, native ads that wait for their icon and image, host fallbacks during SDK initialization, and crash fixes.
+* No API changes since 4.10.0-alpha.3. The SDK's initialization fallback hosts are now jamssp.yektanet.ir and jamssp.yektanet.com.
+
 #4.10.0-alpha.3
 * Updated the Adivery Android SDK to 4.10.0-alpha.3 (pre-release: apps on `adivery: ^4.9.0` must opt in explicitly).
 * Native ads now finish downloading their icon and image before `onAdLoaded` is called, so they no longer load without them. If a download fails or takes more than 10 seconds, the ad is still delivered, without that image.
