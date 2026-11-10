@@ -57,7 +57,9 @@ echo "Releasing adivery $VERSION"
 
 # 2. CHANGELOG must have a matching entry. Extract its body (used later as the
 #    GitHub release notes). Matches "#X.Y.Z", "# X.Y.Z", "## X.Y.Z", optional v.
-NOTES=$(awk -v v="$VERSION" 'BEGIN{gsub(/\./,"\\.",v)} $0 ~ "^#+ *v?" v "([^0-9.]|$)"{f=1;next} /^#/{if(f)exit} f' CHANGELOG.md)
+#    The "-" in the excluded set matters: without it, "#4.10.0-alpha.3" matches
+#    4.10.0 too, and the notes run on through every pre-release entry.
+NOTES=$(awk -v v="$VERSION" 'BEGIN{gsub(/\./,"\\.",v)} $0 ~ "^#+ *v?" v "([^0-9.-]|$)"{f=1;next} /^#/{if(f)exit} f' CHANGELOG.md)
 [ -z "$NOTES" ] && echo "STOP: no CHANGELOG.md entry for $VERSION" || echo "$NOTES"
 
 # 3. Surface the Adivery Android SDK dependency — since 4.8.7 it normally
@@ -102,12 +104,21 @@ STOP and have the user gitignore it before publishing. Relay all warnings.
 ## Phase 2 — Build the example release APK
 
 ```bash
-cd example
-flutter pub get
-flutter build apk --release
-cd ..
+# The example depends on `adivery: ^$VERSION`, which isn't on pub.dev until Phase 5,
+# so build it against the local plugin through a temporary override.
+printf 'dependency_overrides:\n  adivery:\n    path: ../\n' > example/pubspec_overrides.yaml
+# Flutter runs Gradle on Android Studio's bundled JDK (25 here), which Gradle 8.11
+# rejects with just "25.0.4" under "What went wrong". Point Gradle at JDK 17.
+export GRADLE_OPTS="-Dorg.gradle.java.home=/usr/lib/jvm/java-17-openjdk-amd64"
+(cd example && flutter pub get && flutter build apk --release)
+rm -f example/pubspec_overrides.yaml            # never publish or commit it
+git checkout -- example/pubspec.lock            # it now points at the path dependency
 ls -la example/build/app/outputs/flutter-apk/app-release.apk
 ```
+
+`flutter analyze` at the repo root needs the same override before Phase 5.
+Check that `example/pubspec_overrides.yaml` is gone before `flutter pub
+publish`: pub uploads every file that isn't ignored.
 
 This APK is both what the user verifies on-device and what gets attached to the
 GitHub release. Keep its path: `APK=example/build/app/outputs/flutter-apk/app-release.apk`.
